@@ -1,6 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { Category } from 'src/types/category';
+import { Image } from 'src/types/image';
+import { Attribute } from 'src/types/attributes';
 
 @Schema()
 export class Product {
@@ -18,6 +20,15 @@ export class Product {
 
   @Prop([Object])
   categories: Category[];
+
+  @Prop([Object])
+  images: Image[];
+
+  @Prop([Object])
+  attributes: Attribute[];
+
+  @Prop([Object])
+  default_attributes: Attribute[];
 }
 
 /**
