@@ -39,7 +39,7 @@ export type ProductDocument = HydratedDocument<Product>;
 
 /**
  * @param: Class
- * @description: prend la classe TS avec le décorateur '@Schema()' et ses propriétés avec le décourateur '@prop()'
+ * @description: prend la classe TS avec le décorateur '@Schema()' et ses propriétés avec le décorateur '@prop()'
  * @returns Un schéma Mongoose qui peut être utilisé pour créer un modèle ou être configuré davantage
  */
 export const ProductSchema = SchemaFactory.createForClass(Product);
