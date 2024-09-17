@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Model } from 'mongoose';
@@ -12,24 +16,56 @@ export class ProductsService {
   ) {}
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
-    const createdProduct = new this.ProductModel(CreateProductDto);
-
+    const createdProduct = new this.ProductModel(createProductDto);
     return createdProduct.save();
   }
 
-  findAll() {
-    return `This action returns all products`;
+  async findAll(): Promise<Product[]> {
+    const products = await this.ProductModel.find();
+    if (!products) {
+      throw new NotFoundException(`No products found`);
+    }
+    return products;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: string): Promise<Product> {
+    const product = await this.ProductModel.findById(id);
+
+    if (!product) {
+      throw new NotFoundException(`No products found with the id n°${id}`);
+    }
+
+    return product;
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(
+    id: string,
+    updateProductDto: UpdateProductDto,
+  ): Promise<Product> {
+    const product = await this.ProductModel.findById(id);
+
+    if (!product) {
+      throw new NotFoundException(`No products found with the id n°${id}`);
+    }
+
+    const updatedProduct = await this.ProductModel.findByIdAndUpdate(
+      id,
+      updateProductDto,
+      { new: true },
+    );
+
+    return updatedProduct;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: string) {
+    const product = await this.ProductModel.findById(id);
+
+    if (!product) {
+      throw new NotFoundException(`No products found with the id n°${id}`);
+    }
+
+    const deletedProduct = await this.ProductModel.findByIdAndDelete(id);
+
+    return deletedProduct;
   }
 }

@@ -1,4 +1,5 @@
-import { IsString, IsArray } from 'class-validator';
+import { IsString, IsArray, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 import { Category } from 'src/types/category';
 import { Image } from 'src/types/image';
 import { Attribute } from 'src/types/attributes';
@@ -17,14 +18,22 @@ export class CreateProductDto {
   readonly short_description: string;
 
   @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => Object)
   readonly categories: Category[];
 
   @IsArray()
-  readonly image: Image[];
+  @ValidateNested({ each: true })
+  @Type(() => Object)
+  readonly images: Image[];
 
   @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => Object)
   readonly attributes: Attribute[];
 
   @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => Object)
   readonly default_attributes: Attribute[];
 }
