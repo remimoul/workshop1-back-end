@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ColorModule } from './color/color.module';
 import { ProductsModule } from './products/products.module';
+import { AccessoryModule } from './accessory/accessory.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ProductsModule } from './products/products.module';
     }),
     ColorModule,
     ProductsModule,
+    AccessoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
