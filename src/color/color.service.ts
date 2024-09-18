@@ -1,11 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { CreateColorDto } from './dto/create-color.dto';
 import { UpdateColorDto } from './dto/update-color.dto';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+import { Color } from './schema/color.schema';
 
 @Injectable()
 export class ColorService {
-  create(createColorDto: CreateColorDto) {
-    return 'This action adds a new color';
+  constructor(@InjectModel(Color.name) private ColorModel: Model<Color>) {}
+
+  async create(createColorDto: CreateColorDto) {
+    const { name } = createColorDto;
+
+    const color = await this.ColorModel.findOne(name);
   }
 
   findAll() {
