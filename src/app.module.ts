@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ColorModule } from './color/color.module';
 import { ProductsModule } from './products/products.module';
 import { AccessoryModule } from './accessory/accessory.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { AccessoryModule } from './accessory/accessory.module';
     ColorModule,
     ProductsModule,
     AccessoryModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

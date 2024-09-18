@@ -6,4 +6,7 @@ export interface Image {
   date_modified_gmt?: Date;
   name?: string;
   alt?: string;
+  frontViewUrl?: string;
+  backViewUrl?: string;
+  sideViewUrl?: string;
 }
