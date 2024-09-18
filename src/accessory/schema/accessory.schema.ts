@@ -13,7 +13,7 @@ export class Accessory {
   category: Category;
 
   @Prop([Object])
-  color: ColorType[];
+  variants: ColorType[];
 }
 
 /**

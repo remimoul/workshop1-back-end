@@ -8,5 +8,5 @@ export class CreateAccessoryDto {
   readonly category_id: any;
 
   @IsArray()
-  readonly color: ColorType[];
+  readonly variants: ColorType[];
 }

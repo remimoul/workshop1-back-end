@@ -12,5 +12,5 @@ export class UpdateAccessoryDto extends PartialType(CreateAccessoryDto) {
 
   @IsArray()
   @IsOptional()
-  readonly color: ColorType[];
+  readonly variants: ColorType[];
 }
