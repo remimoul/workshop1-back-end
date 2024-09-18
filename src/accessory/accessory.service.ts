@@ -15,23 +15,49 @@ export class AccessoryService {
     @InjectModel(Accessory.name) private accessoryModel: Model<Accessory>,
   ) {}
 
-  create(createAccessoryDto: CreateAccessoryDto) {
-    return 'This action adds a new accessory';
+  async create(createAccessoryDto: CreateAccessoryDto) {
+    const newAccessory = new this.accessoryModel(createAccessoryDto);
+
+    return newAccessory.save();
   }
 
-  findAll() {
-    return `This action returns all accessory`;
+  async findAll() {
+    const accessories = await this.accessoryModel.find();
+
+    if (!accessories) throw new NotFoundException(`No accessories found`);
+
+    return accessories;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} accessory`;
+  async findOne(id: string) {
+    const accessory = await this.accessoryModel.findById(id);
+
+    if (!accessory)
+      throw new NotFoundException(`No accessories found with the id ${id}`);
+
+    return accessory;
   }
 
-  update(id: number, updateAccessoryDto: UpdateAccessoryDto) {
-    return `This action updates a #${id} accessory`;
+  async update(id: string, updateAccessoryDto: UpdateAccessoryDto) {
+    const accessory = await this.accessoryModel.findById(id);
+
+    if (!accessory)
+      throw new NotFoundException(`No accessories found with the id ${id}`);
+
+    const updatedAccessory = await this.accessoryModel.findByIdAndUpdate(
+      id,
+      updateAccessoryDto,
+      { new: true },
+    );
+    return updatedAccessory;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} accessory`;
+  async remove(id: string) {
+    const accessory = await this.accessoryModel.findById(id);
+
+    if (!accessory)
+      throw new NotFoundException(`No accessories found with the id ${id}`);
+
+    const deletedAccessory = await this.accessoryModel.findByIdAndDelete(id);
   }
 }
