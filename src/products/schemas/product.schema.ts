@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { Category } from 'src/types/category';
 import { Image } from 'src/types/image';
-import { Attribute } from 'src/types/attributes';
+import { Attribute } from 'src/types/attribute';
 
 @Schema()
 export class Product {
