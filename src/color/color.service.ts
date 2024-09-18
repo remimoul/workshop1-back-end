@@ -13,25 +13,74 @@ import { Color } from './schema/color.schema';
 export class ColorService {
   constructor(@InjectModel(Color.name) private ColorModel: Model<Color>) {}
 
-  async create(createColorDto: CreateColorDto) {
+  async create(createColorDto: CreateColorDto): Promise<Color> {
     const { name } = createColorDto;
 
-    const color = await this.ColorModel.findOne(name);
+    const color = await this.ColorModel.findOne({ name });
+
+    if (color) {
+      throw new ConflictException(`Color ${name} already exists`);
+    }
+
+    const newColor = new this.ColorModel(createColorDto);
+    return newColor.save();
   }
 
-  findAll() {
-    return `This action returns all color`;
+  async findAll(): Promise<Color[]> {
+    const colors = await this.ColorModel.find();
+
+    if (!colors) {
+      throw new NotFoundException(`No colors found`);
+    }
+
+    return colors;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} color`;
+  async findOne(id: string): Promise<Color> {
+    const color = await this.ColorModel.findById(id);
+
+    if (!color) {
+      throw new NotFoundException(`No colors found with the id ${id}`);
+    }
+
+    return color;
   }
 
-  update(id: number, updateColorDto: UpdateColorDto) {
-    return `This action updates a #${id} color`;
+  async findOneByName(name: string): Promise<Color> {
+    const color = await this.ColorModel.findOne({ name });
+
+    if (!color) {
+      throw new NotFoundException(`No colors found with the name ${name}`);
+    }
+
+    return color;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} color`;
+  async update(id: number, updateColorDto: UpdateColorDto): Promise<Color> {
+    const color = await this.ColorModel.findById(id);
+
+    if (!color) {
+      throw new NotFoundException(`No colors found with the id ${id}`);
+    }
+
+    const updatedColor = await this.ColorModel.findByIdAndUpdate(
+      id,
+      updateColorDto,
+      { new: true },
+    );
+
+    return updatedColor;
+  }
+
+  async remove(id: number): Promise<Color> {
+    const color = await this.ColorModel.findById(id);
+
+    if (!color) {
+      throw new NotFoundException(`No colors found with the id ${id}`);
+    }
+
+    const deletedColor = await this.ColorModel.findByIdAndDelete(id);
+
+    return deletedColor;
   }
 }

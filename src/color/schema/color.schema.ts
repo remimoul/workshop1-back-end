@@ -10,8 +10,8 @@ export class Color {
   @Prop()
   code: string;
 
-  @Prop({ type: [Object], required: true })
-  option: Attribute[];
+  @Prop()
+  isTransparent: boolean;
 }
 
 /**
