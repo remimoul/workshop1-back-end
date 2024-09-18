@@ -15,12 +15,12 @@ import { UpdateColorDto } from './dto/update-color.dto';
 export class ColorController {
   constructor(private readonly colorService: ColorService) {}
 
-  @Post()
+  @Post('/add')
   create(@Body() createColorDto: CreateColorDto) {
     return this.colorService.create(createColorDto);
   }
 
-  @Get()
+  @Get('/all')
   findAll() {
     return this.colorService.findAll();
   }
@@ -30,7 +30,7 @@ export class ColorController {
     return this.colorService.findOne(id);
   }
 
-  @Get(':name')
+  @Get('/name/:name')
   findOneByName(@Param('name') name: string) {
     return this.colorService.findOneByName(name);
   }
