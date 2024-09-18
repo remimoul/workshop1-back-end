@@ -2,7 +2,7 @@ import { IsString, IsArray, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Category } from 'src/types/category';
 import { Image } from 'src/types/image';
-import { Attribute } from 'src/types/attributes';
+import { Attribute } from 'src/types/attribute';
 
 export class CreateProductDto {
   @IsString()
