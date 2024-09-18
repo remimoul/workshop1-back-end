@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ColorService } from './color.service';
 import { CreateColorDto } from './dto/create-color.dto';
 import { UpdateColorDto } from './dto/update-color.dto';
@@ -19,7 +27,12 @@ export class ColorController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.colorService.findOne(+id);
+    return this.colorService.findOne(id);
+  }
+
+  @Get(':name')
+  findOneByName(@Param('name') name: string) {
+    return this.colorService.findOneByName(name);
   }
 
   @Patch(':id')
