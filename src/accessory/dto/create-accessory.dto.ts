@@ -5,7 +5,7 @@ export class CreateAccessoryDto {
   @IsString()
   readonly name: string;
 
-  readonly category: any;
+  readonly category_id: any;
 
   @IsArray()
   readonly color: ColorType[];

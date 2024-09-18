@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { AccessoryService } from './accessory.service';
 import { CreateAccessoryDto } from './dto/create-accessory.dto';
 import { UpdateAccessoryDto } from './dto/update-accessory.dto';
@@ -7,28 +15,31 @@ import { UpdateAccessoryDto } from './dto/update-accessory.dto';
 export class AccessoryController {
   constructor(private readonly accessoryService: AccessoryService) {}
 
-  @Post()
+  @Post('/add')
   create(@Body() createAccessoryDto: CreateAccessoryDto) {
     return this.accessoryService.create(createAccessoryDto);
   }
 
-  @Get()
+  @Get('/all')
   findAll() {
     return this.accessoryService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.accessoryService.findOne(+id);
+    return this.accessoryService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAccessoryDto: UpdateAccessoryDto) {
-    return this.accessoryService.update(+id, updateAccessoryDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateAccessoryDto: UpdateAccessoryDto,
+  ) {
+    return this.accessoryService.update(id, updateAccessoryDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.accessoryService.remove(+id);
+    return this.accessoryService.remove(id);
   }
 }
