@@ -5,6 +5,7 @@ import {
   IsOptional,
   ValidateNested,
   IsBoolean,
+  IsNumber,
 } from 'class-validator';
 
 class ImageDto {
@@ -23,13 +24,12 @@ class ImageDto {
   @IsOptional()
   @IsString()
   description?: string;
-
-  @IsOptional()
-  @IsBoolean()
-  isBased?: boolean;
 }
 
 class VariantDto {
+  // @IsNumber()
+  // id: number;
+
   @IsString()
   name: string;
 
@@ -57,4 +57,7 @@ export class CreateAccessoryDto {
   @ValidateNested({ each: true })
   @Type(() => VariantDto)
   variants: VariantDto[];
+
+  @IsBoolean()
+  isBase: boolean;
 }
