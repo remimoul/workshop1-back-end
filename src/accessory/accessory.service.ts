@@ -12,6 +12,7 @@ import { Accessory } from './schema/accessory.schema';
 import * as fs from 'fs';
 import * as path from 'path';
 import { Image } from 'src/types/image';
+import { validate } from 'class-validator';
 
 @Injectable()
 export class AccessoryService {
@@ -37,6 +38,22 @@ export class AccessoryService {
   ) {
     console.log('Creating accessory with DTO:', createAccessoryDto);
 
+    // Ajouter un id à chaque variant avant la validation
+    if (createAccessoryDto.variants && createAccessoryDto.variants.length > 0) {
+      createAccessoryDto.variants = createAccessoryDto.variants.map(
+        (variant) => ({
+          ...variant,
+          id: Date.now() + Math.floor(Math.random() * 1000), // Pour éviter les doublons
+        }),
+      );
+    }
+
+    // Valider le DTO modifié
+    const errors = await validate(createAccessoryDto);
+    if (errors.length > 0) {
+      throw new BadRequestException(errors);
+    }
+
     const newAccessory = new this.accessoryModel(createAccessoryDto);
 
     const saveFile = async (file?: Express.Multer.File) => {
@@ -47,8 +64,6 @@ export class AccessoryService {
 
     if (newAccessory.variants && newAccessory.variants.length > 0) {
       for (const variant of newAccessory.variants) {
-        variant.id = Date.now();
-
         for (const img of variant.images) {
           if (files.frontViewImage && files.frontViewImage.length > 0) {
             img.frontViewUrl = await saveFile(files.frontViewImage[0]);
@@ -76,6 +91,7 @@ export class AccessoryService {
       throw new BadRequestException('Failed to save accessory');
     }
   }
+
   /**
    * Sauvegarde un fichier sur le serveur.
    *

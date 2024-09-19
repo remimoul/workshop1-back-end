@@ -38,7 +38,7 @@ export class AccessoryController {
       sideViewImage?: Express.Multer.File[];
     },
   ) {
-    console.log('Received data:', data);
+    // console.log('Received data:', data);
 
     let createAccessoryDto: CreateAccessoryDto;
 
@@ -50,12 +50,12 @@ export class AccessoryController {
       throw new BadRequestException('Invalid data format');
     }
 
-    console.log('Parsed DTO:', createAccessoryDto);
+    // console.log('Parsed DTO:', createAccessoryDto);
 
     // Valider les données
     const errors = await validate(createAccessoryDto);
     if (errors.length > 0) {
-      console.log('Validation errors:', errors);
+      // console.log('Validation errors:', errors);
       throw new BadRequestException(errors);
     }
 

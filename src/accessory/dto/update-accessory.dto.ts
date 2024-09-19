@@ -3,6 +3,7 @@ import { CreateAccessoryDto } from './create-accessory.dto';
 import {
   IsArray,
   IsBoolean,
+  IsInt,
   IsNumber,
   IsOptional,
   IsString,
@@ -22,15 +23,15 @@ export class UpdateAccessoryDto extends PartialType(CreateAccessoryDto) {
   @IsArray()
   @IsOptional()
   @ValidateNested({ each: true })
-  @Type(() => VariantDto)
-  readonly variants: VariantDto[];
+  @Type(() => UpdateVariantDto)
+  readonly variants: UpdateVariantDto[];
 
   @IsString()
   @IsOptional()
   readonly description: string;
 }
 
-class ImageDto {
+class UpdateImageDto {
   @IsOptional()
   @IsString()
   frontViewUrl?: string;
@@ -48,20 +49,23 @@ class ImageDto {
   description?: string;
 }
 
-class VariantDto {
-  // @IsNumber()
-  // id: number;
+class UpdateVariantDto {
+  @IsOptional()
+  id: number;
 
   @IsString()
+  @IsOptional()
   name: string;
 
   @IsString()
+  @IsOptional()
   hexcode: string;
 
   @IsArray()
+  @IsOptional()
   @ValidateNested({ each: true })
-  @Type(() => ImageDto)
-  images: ImageDto[];
+  @Type(() => UpdateImageDto)
+  images: UpdateImageDto[];
 
   @IsOptional()
   @IsBoolean()

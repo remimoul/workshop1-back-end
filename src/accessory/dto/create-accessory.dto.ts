@@ -6,6 +6,7 @@ import {
   ValidateNested,
   IsBoolean,
   IsNumber,
+  IsInt,
 } from 'class-validator';
 
 class ImageDto {
@@ -27,7 +28,6 @@ class ImageDto {
 }
 
 class VariantDto {
-  @IsNumber()
   id: number;
 
   @IsString()
