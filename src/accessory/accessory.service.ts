@@ -151,5 +151,7 @@ export class AccessoryService {
       throw new NotFoundException(`No accessories found with the id ${id}`);
 
     const deletedAccessory = await this.accessoryModel.findByIdAndDelete(id);
+
+    return deletedAccessory;
   }
 }
