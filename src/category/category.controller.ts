@@ -1,11 +1,11 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -28,6 +28,11 @@ export class CategoryController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.categoryService.findOne(+id);
+  }
+
+  @Get('/slug/:slug')
+  findOneBySlug(@Param('slug') slug: string) {
+    return this.categoryService.findOneBySlug(slug);
   }
 
   @Patch(':id')
