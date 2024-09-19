@@ -154,4 +154,23 @@ export class AccessoryService {
 
     return deletedAccessory;
   }
+
+  async getVariantById(variantId: number) {
+    const accessory = await this.accessoryModel.findOne(
+      { 'variants.id': variantId },
+      { 'variants.$': 1 },
+    );
+
+    if (!accessory) {
+      throw new NotFoundException(
+        `No accessory found with variant id ${variantId}`,
+      );
+    }
+
+    if (!accessory.variants || accessory.variants.length === 0) {
+      throw new NotFoundException(`Variant with id ${variantId} not found`);
+    }
+    console.log(variantId);
+    return accessory.variants[0];
+  }
 }

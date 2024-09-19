@@ -88,4 +88,9 @@ export class AccessoryController {
   remove(@Param('id') id: string) {
     return this.accessoryService.remove(id);
   }
+
+  @Get('/variant/:variantId')
+  getVariantById(@Param('variantId') variantId: string) {
+    return this.accessoryService.getVariantById(+variantId);
+  }
 }
