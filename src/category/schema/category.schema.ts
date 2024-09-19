@@ -3,7 +3,7 @@ import { HydratedDocument } from 'mongoose';
 
 @Schema()
 export class Category {
-  @Prop({ type: Number, unique: true })
+  @Prop({ type: Number })
   id: number;
 
   @Prop()

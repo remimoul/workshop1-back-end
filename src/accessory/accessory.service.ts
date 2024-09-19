@@ -85,7 +85,12 @@ export class AccessoryService {
     try {
       const savedAccessory = await newAccessory.save();
       console.log('Accessory saved successfully:', savedAccessory);
-      return savedAccessory;
+      const variantIds = savedAccessory.variants.map((variant) => variant.id);
+
+      return {
+        savedAccessory,
+        variantIds,
+      };
     } catch (error) {
       console.error('Error saving accessory:', error);
       throw new BadRequestException('Failed to save accessory');
@@ -125,6 +130,23 @@ export class AccessoryService {
     return accessory;
   }
 
+  async findByCategory(categoryId: number) {
+    const accessories = await this.accessoryModel
+      .find({
+        category_id: Number(categoryId), // Conversion explicite
+      })
+      .lean()
+      .exec();
+
+    if (!accessories || accessories.length === 0) {
+      throw new NotFoundException(
+        `No accessories found for the category id n°${categoryId}`,
+      );
+    }
+
+    return accessories;
+  }
+
   async update(id: string, updateAccessoryDto: UpdateAccessoryDto) {
     const accessory = await this.accessoryModel.findById(id);
 
@@ -146,5 +168,26 @@ export class AccessoryService {
       throw new NotFoundException(`No accessories found with the id ${id}`);
 
     const deletedAccessory = await this.accessoryModel.findByIdAndDelete(id);
+
+    return deletedAccessory;
+  }
+
+  async getVariantById(variantId: number) {
+    const accessory = await this.accessoryModel.findOne(
+      { 'variants.id': variantId },
+      { 'variants.$': 1 },
+    );
+
+    if (!accessory) {
+      throw new NotFoundException(
+        `No accessory found with variant id ${variantId}`,
+      );
+    }
+
+    if (!accessory.variants || accessory.variants.length === 0) {
+      throw new NotFoundException(`Variant with id ${variantId} not found`);
+    }
+    console.log(variantId);
+    return accessory.variants[0];
   }
 }

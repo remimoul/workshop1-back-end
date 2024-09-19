@@ -58,8 +58,8 @@ export class CreateAccessoryDto {
   @IsString()
   name: string;
 
-  @IsString()
-  category_id: string;
+  @IsNumber()
+  category_id: number;
 
   @IsArray()
   @ValidateNested({ each: true })

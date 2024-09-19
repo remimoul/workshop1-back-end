@@ -17,6 +17,7 @@ import {
   ],
   controllers: [CategoryController],
   providers: [CategoryService],
+  exports: [CategoryService],
 })
 export class CategoryModule implements NestModule {
   constructor(

@@ -76,6 +76,11 @@ export class AccessoryController {
     return this.accessoryService.findOne(id);
   }
 
+  @Get('/category/:categoryId')
+  findByCategory(@Param('categoryId') categoryId: number) {
+    return this.accessoryService.findByCategory(categoryId);
+  }
+
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -87,5 +92,10 @@ export class AccessoryController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.accessoryService.remove(id);
+  }
+
+  @Get('/variant/:variantId')
+  getVariantById(@Param('variantId') variantId: string) {
+    return this.accessoryService.getVariantById(+variantId);
   }
 }
