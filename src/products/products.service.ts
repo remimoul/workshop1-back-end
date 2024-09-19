@@ -85,86 +85,36 @@ export class ProductsService {
     return deletedProduct;
   }
 
-  async getWoocommerceUrl(data: CreateProductDto) {
-    // const data = {
-    //   name: 'GameBoy Color',
-    //   type: 'simple',
-    //   description: "Oh wow, c'est une gameboy, comme dans le titre",
-    //   short_description: "Oh wow, c'est une gameboy, comme dans le titre",
-    //   categories: [
-    //     {
-    //       _id: '66eac7719ab2b9ce211b3437',
-    //       id: 1,
-    //       name: 'GameBoy Color',
-    //       price: 24,
-    //       discount: 149,
-    //       __v: 0,
-    //     },
-    //   ],
-    //   images: [
-    //     {
-    //       src: 'https://api-retrometroid.devprod.fr/wp-content/uploads/2024/09/Retro-Game-Wallpaper.jpeg',
-    //     },
-    //   ],
-    //   attributes: [
-    //     {
-    //       name: 'Coque arrière',
-    //       visible: true,
-    //       variation: true,
-    //       options: ['White - #FFF'],
-    //     },
-    //     {
-    //       name: 'Coque arrière',
-    //       visible: true,
-    //       variation: true,
-    //       options: ['Black - #000'],
-    //     },
-    //   ],
-    //   default_attributes: [
-    //     {
-    //       name: 'Coque arrière',
-    //       visible: true,
-    //       variation: true,
-    //       options: ['White - #FFF'],
-    //     },
-    //     {
-    //       name: 'Coque arrière',
-    //       visible: true,
-    //       variation: true,
-    //       options: ['Black - #000'],
-    //     },
-    //   ],
-    // };
-    this.wooCommerce
-      .post('products', data)
-      .then((response) => {
-        console.log(response.data);
-        const link =
-          process.env.WOOCOMMERCE_URL + '/?add-to-cart=' + response.data.id;
-        return link;
-      })
-      .catch((error) => {
-        console.log(error.response.data);
-      });
+  async getWoocommerceUrl(data: CreateProductDto): Promise<string> {
+    try {
+      const response = await this.wooCommerce.post('products', data);
+      console.log(response.data);
+      const link =
+        process.env.WOOCOMMERCE_URL + '/?add-to-cart=' + response.data.id;
+      return link;
+    } catch (error) {
+      console.log(error.response.data);
+      return error.response.data;
+    }
   }
 
   async addToCart(payload: AddToCartPayload) {
-    const payload2: AddToCartPayload = {
-      category_id: 1,
-      applyDiscount: false,
-      options: [
-        {
-          accessoryId: '66ec9f269e09c12798750493',
-          variantId: 1726783271237,
-        },
-        { accessoryId: '66eca047e00bf332b875780d', variantId: 1726783559931 },
-      ],
-    };
+    // const payload2: AddToCartPayload = {
+    //   category_id: 1,
+    //   applyDiscount: false,
+    //   options: [
+    //     {
+    //       accessoryId: '66ec9f269e09c12798750493',
+    //       variantId: 1726783271237,
+    //     },
+    //     { accessoryId: '66eca047e00bf332b875780d', variantId: 1726783559931 },
+    //   ],
+    // };
 
     const attributes: Attribute[] = [];
 
     // Créer un tableau de promesses incluant les options
-    const optionPromises = payload2.options.map(async (option) => {
+    const optionPromises = payload.options.map(async (option) => {
       const accessory = await this.accessoryService.findOne(option.accessoryId);
       const variant = await this.accessoryService.getVariantById(
         option.variantId,
@@ -180,21 +130,17 @@ export class ProductsService {
       attributes.push(attribute);
     });
 
-    // Attendre que toutes les promesses des options soient terminées
     await Promise.all(optionPromises);
 
-    // Rechercher la catégorie et attendre la promesse
-    const category = await this.categoryService.findOne(payload2.category_id);
+    const category = await this.categoryService.findOne(payload.category_id);
 
     const type = 'simple';
     const description = "Oh wow, c'est une gameboy, comme dans le titre";
     const images = [{ src: process.env.IMAGE_URL }];
 
-    // Utiliser category.name comme souhaité
     console.log('category name: ', category.name);
     console.log('attributes: ', attributes);
 
-    // Créer l'objet CreateProductDto
     const createProductDto: CreateProductDto = {
       name: category.name,
       type: type,
@@ -208,6 +154,6 @@ export class ProductsService {
 
     console.log('createProductDto: ', createProductDto);
 
-    return createProductDto;
+    return this.getWoocommerceUrl(createProductDto);
   }
 }

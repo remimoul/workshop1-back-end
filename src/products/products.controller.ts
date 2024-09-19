@@ -41,15 +41,13 @@ export class ProductsController {
     return this.productsService.remove(id);
   }
 
-  @Post('/woo')
-  getWoocommerceUrl() {
-    return this.productsService.getWoocommerceUrl();
-  }
+  // @Post('/woo')
+  // getWoocommerceUrl() {
+  //   return this.productsService.getWoocommerceUrl();
+  // }
 
   @Post('cart')
-  async addToCart(
-    @Body() payload: AddToCartPayload,
-  ): Promise<CreateProductDto> {
+  async addToCart(@Body() payload: AddToCartPayload): Promise<string> {
     return this.productsService.addToCart(payload);
   }
 }
