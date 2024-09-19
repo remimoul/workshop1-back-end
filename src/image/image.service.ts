@@ -4,6 +4,6 @@ import { join } from 'path';
 @Injectable()
 export class ImageService {
   getImagePath(imageName: string): string {
-    return join(__dirname, '..', 'uploads', imageName);
+    return join(process.cwd(), 'uploads', imageName);
   }
 }
