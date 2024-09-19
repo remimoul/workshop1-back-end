@@ -17,6 +17,9 @@ export class Accessory {
 
   @Prop({ required: true })
   isBase: boolean;
+
+  @Prop({ required: false })
+  description: string;
 }
 
 /**

@@ -13,4 +13,8 @@ export class CreateCategoryDto {
 
   @IsNumber()
   readonly deviceDiscount: number;
+
+  @IsString()
+  @IsOptional()
+  readonly description: string;
 }
