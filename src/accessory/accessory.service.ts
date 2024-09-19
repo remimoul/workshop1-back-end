@@ -33,7 +33,13 @@ export class AccessoryService {
       const images = await this.saveFiles(files);
       if (newAccessory.variants && newAccessory.variants.length > 0) {
         newAccessory.variants.forEach((variant, index) => {
-          variant.images = images.slice(index * 3, (index + 1) * 3);
+          const variantImages = images.slice(index * 3, (index + 1) * 3);
+          variant.images = variant.images.map((img, imgIndex) => ({
+            ...img,
+            src: variantImages[imgIndex]?.src || '',
+            name: variantImages[imgIndex]?.name || '',
+            alt: variantImages[imgIndex]?.alt || '',
+          }));
         });
       } else {
         throw new BadRequestException(

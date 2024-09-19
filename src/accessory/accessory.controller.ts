@@ -28,15 +28,27 @@ export class AccessoryController {
   @Post('/add')
   @UseInterceptors(FileFieldsInterceptor([{ name: 'images', maxCount: 10 }]))
   async create(
-    @Body() createAccessoryDto: CreateAccessoryDto,
+    @Body('data') data: string,
     @UploadedFiles() files: { images?: Express.Multer.File[] },
   ) {
-    console.log('Received DTO:', createAccessoryDto); // Pour le débogage
+    console.log('Received data:', data);
+
+    let createAccessoryDto: CreateAccessoryDto;
+
+    try {
+      const parsedData = JSON.parse(data);
+      createAccessoryDto = plainToClass(CreateAccessoryDto, parsedData);
+    } catch (error) {
+      console.error('Error parsing data:', error);
+      throw new BadRequestException('Invalid data format');
+    }
+
+    console.log('Parsed DTO:', createAccessoryDto);
 
     // Valider les données
     const errors = await validate(createAccessoryDto);
     if (errors.length > 0) {
-      console.log('Validation errors:', errors); // Pour le débogage
+      console.log('Validation errors:', errors);
       throw new BadRequestException(errors);
     }
 

@@ -4,7 +4,6 @@ import {
   IsString,
   IsOptional,
   ValidateNested,
-  IsMongoId,
   IsBoolean,
 } from 'class-validator';
 
@@ -51,7 +50,7 @@ export class CreateAccessoryDto {
   @IsString()
   name: string;
 
-  @IsMongoId()
+  @IsString() // Changed from @IsMongoId() to @IsString()
   category_id: string;
 
   @IsArray()
