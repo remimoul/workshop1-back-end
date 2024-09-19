@@ -130,6 +130,19 @@ export class AccessoryService {
     return accessory;
   }
 
+  async findByCategory(categoryId: number) {
+    const accessories = await this.accessoryModel.find({
+      category_id: categoryId,
+    });
+
+    if (!accessories)
+      throw new NotFoundException(
+        `No accessories found the category id n°${categoryId}`,
+      );
+
+    return accessories;
+  }
+
   async update(id: string, updateAccessoryDto: UpdateAccessoryDto) {
     const accessory = await this.accessoryModel.findById(id);
 

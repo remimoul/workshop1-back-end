@@ -76,6 +76,11 @@ export class AccessoryController {
     return this.accessoryService.findOne(id);
   }
 
+  @Get('/category/:categoryId')
+  findByCategory(@Param('categoryId') categoryId: number) {
+    return this.accessoryService.findByCategory(categoryId);
+  }
+
   @Patch(':id')
   update(
     @Param('id') id: string,
