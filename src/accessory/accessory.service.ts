@@ -153,8 +153,8 @@ export class AccessoryService {
     if (!accessory)
       throw new NotFoundException(`No accessories found with the id ${id}`);
 
-    const updatedAccessory = await this.accessoryModel.findByIdAndUpdate(
-      id,
+    const updatedAccessory = await this.accessoryModel.findOneAndUpdate(
+      accessory.id,
       updateAccessoryDto,
       { new: true },
     );

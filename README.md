@@ -1,30 +1,4 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+# Workshop 1 MDS M1 - Refonte Retrometroid - API
 
 ## Installation
 
@@ -32,7 +6,7 @@
 $ npm install
 ```
 
-## Running the app
+### Running the app using embedded server
 
 ```bash
 # development
@@ -45,29 +19,194 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
+### Running the app using Docker
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+$ docker-compose up
 ```
 
-## Support
+## Routes
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### POST /category/add
 
-## Stay in touch
+Add a new category to the database.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+#### Body
 
-## License
+```json
+{
+  
+}
+```
 
-Nest is [MIT licensed](LICENSE).
+#### Response
+
+```json
+{
+  
+}
+```
+
+### GET /category/all
+
+Get all categories from the database.
+
+#### Response
+
+```json
+{
+
+}
+```
+
+### GET /category/:id
+
+Get a category by id.
+
+#### Response
+
+```json
+{
+
+}
+```
+
+### PATCH /category/:id
+
+Update a category by id.
+
+#### Body
+
+```json
+{
+
+}
+```
+
+#### Response
+
+```json
+{
+
+}
+```
+
+### DELETE /category/:id
+
+Delete a category by id.
+
+#### Response
+
+```json
+{
+
+}
+```
+
+### POST /accessory/add
+
+Add a new accessory to the database.
+
+#### Body
+
+```json
+{
+
+}
+```
+
+#### Response
+
+```json
+{
+
+}
+```
+
+### GET /accessory/all
+
+Get all accessories from the database.
+
+#### Response
+
+```json
+{
+
+}
+```
+
+### GET /accessory/:id
+
+Get an accessory by id.
+
+#### Response
+
+```json
+{
+
+}
+```
+
+### PATCH /accessory/:id
+
+Update an accessory by id.
+
+#### Body
+
+```json
+{
+
+}
+```
+
+#### Response
+
+```json
+{
+
+}
+```
+
+### DELETE /accessory/:id
+
+Delete an accessory by id.
+
+#### Response
+
+```json
+{
+
+}
+```
+
+### GET /images/:imageName
+
+Get an image by name.
+
+#### Response
+
+The image is returned in the response.
+
+### GET /images/front/:imageName
+
+Get a front image by name.
+
+#### Response
+
+The image is returned in the response.
+
+### GET /images/back/:imageName
+
+Get a back image by name.
+
+#### Response
+
+The image is returned in the response.
+
+### GET /images/side/:imageName
+
+Get a side image by name.
+
+#### Response
+
+The image is returned in the response.
