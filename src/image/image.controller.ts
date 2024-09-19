@@ -53,9 +53,39 @@ export class ImageController {
     return res.json(images);
   }
 
-  @Get('front/ips/all')
+  @Get('front/strap/all')
   getStrapUrlFromGBCFrontFolder(@Res() res: Response) {
     const images = this.imageService.getStrapUrlFromGBCFrontFolder();
+    return res.json(images);
+  }
+
+  @Get('front/btn/all')
+  getBtnpUrlFromGBCFrontFolder(@Res() res: Response) {
+    const images = this.imageService.getBtnpUrlFromGBCFrontFolder();
+    return res.json(images);
+  }
+
+  @Get('front/pads/all')
+  getPadspUrlFromGBCFrontFolder(@Res() res: Response) {
+    const images = this.imageService.getPadspUrlFromGBCFrontFolder();
+    return res.json(images);
+  }
+
+  @Get('front/shell/all')
+  getShellpUrlFromGBCFrontFolder(@Res() res: Response) {
+    const images = this.imageService.getShellpUrlFromGBCFrontFolder();
+    return res.json(images);
+  }
+
+  @Get('front/battery/all')
+  getBatterypUrlFromGBCFrontFolder(@Res() res: Response) {
+    const images = this.imageService.getBatterypUrlFromGBCFrontFolder();
+    return res.json(images);
+  }
+
+  @Get('front/power/all')
+  getPowerpUrlFromGBCFrontFolder(@Res() res: Response) {
+    const images = this.imageService.getPowerpUrlFromGBCFrontFolder();
     return res.json(images);
   }
 }

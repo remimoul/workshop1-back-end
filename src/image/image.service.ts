@@ -64,4 +64,34 @@ export class ImageService {
     const files = readdirSync(uploadsDir);
     return files.filter((file) => file.includes('Strap'));
   }
+
+  getBtnpUrlFromGBCFrontFolder(): string[] {
+    const uploadsDir = join(process.cwd(), 'assets/GBC/FRONT');
+    const files = readdirSync(uploadsDir);
+    return files.filter((file) => file.includes('BOUTONS'));
+  }
+
+  getPadspUrlFromGBCFrontFolder(): string[] {
+    const uploadsDir = join(process.cwd(), 'assets/GBC/FRONT');
+    const files = readdirSync(uploadsDir);
+    return files.filter((file) => file.includes('PADS'));
+  }
+
+  getShellpUrlFromGBCFrontFolder(): string[] {
+    const uploadsDir = join(process.cwd(), 'assets/GBC/FRONT');
+    const files = readdirSync(uploadsDir);
+    return files.filter((file) => file.includes('SHELL'));
+  }
+
+  getBatterypUrlFromGBCFrontFolder(): string[] {
+    const uploadsDir = join(process.cwd(), 'assets/GBC/FRONT');
+    const files = readdirSync(uploadsDir);
+    return files.filter((file) => file.includes('BATTERY'));
+  }
+
+  getPowerpUrlFromGBCFrontFolder(): string[] {
+    const uploadsDir = join(process.cwd(), 'assets/GBC/FRONT');
+    const files = readdirSync(uploadsDir);
+    return files.filter((file) => file.includes('BATTERY'));
+  }
 }
