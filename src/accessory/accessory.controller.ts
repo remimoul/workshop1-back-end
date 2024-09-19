@@ -22,10 +22,21 @@ export class AccessoryController {
   constructor(private readonly accessoryService: AccessoryService) {}
 
   @Post('/add')
-  @UseInterceptors(FileFieldsInterceptor([{ name: 'images', maxCount: 10 }]))
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'frontViewImage', maxCount: 1 },
+      { name: 'backViewImage', maxCount: 1 },
+      { name: 'sideViewImage', maxCount: 1 },
+    ]),
+  )
   async create(
     @Body('data') data: string,
-    @UploadedFiles() files: { images?: Express.Multer.File[] },
+    @UploadedFiles()
+    files: {
+      frontViewImage?: Express.Multer.File[];
+      backViewImage?: Express.Multer.File[];
+      sideViewImage?: Express.Multer.File[];
+    },
   ) {
     console.log('Received data:', data);
 
@@ -48,10 +59,11 @@ export class AccessoryController {
       throw new BadRequestException(errors);
     }
 
-    return this.accessoryService.create(
-      createAccessoryDto,
-      files?.images || [],
-    );
+    return this.accessoryService.create(createAccessoryDto, {
+      frontViewImage: files.frontViewImage,
+      backViewImage: files.backViewImage,
+      sideViewImage: files.sideViewImage,
+    });
   }
 
   @Get('/all')

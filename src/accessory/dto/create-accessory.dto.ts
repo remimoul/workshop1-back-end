@@ -50,7 +50,7 @@ export class CreateAccessoryDto {
   @IsString()
   name: string;
 
-  @IsString() // Changed from @IsMongoId() to @IsString()
+  @IsString()
   category_id: string;
 
   @IsArray()

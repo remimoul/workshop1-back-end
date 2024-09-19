@@ -6,7 +6,7 @@ export interface Image {
   isBase?: boolean;
   name?: string;
   alt?: string;
-  src: string;
+  src?: string;
   date_created?: Date;
   date_created_gmt?: Date;
   date_modified?: Date;

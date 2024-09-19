@@ -29,30 +29,40 @@ export class AccessoryService {
    */
   async create(
     createAccessoryDto: CreateAccessoryDto,
-    files: Array<Express.Multer.File>,
+    files: {
+      frontViewImage?: Express.Multer.File[];
+      backViewImage?: Express.Multer.File[];
+      sideViewImage?: Express.Multer.File[];
+    },
   ) {
     console.log('Creating accessory with DTO:', createAccessoryDto);
-    console.log('Number of files:', files.length);
 
     const newAccessory = new this.accessoryModel(createAccessoryDto);
 
-    if (files && files.length > 0) {
-      const images = await this.saveFiles(files);
-      if (newAccessory.variants && newAccessory.variants.length > 0) {
-        newAccessory.variants.forEach((variant, index) => {
-          const variantImages = images.slice(index * 3, (index + 1) * 3);
-          variant.images = variant.images.map((img, imgIndex) => ({
-            ...img,
-            src: variantImages[imgIndex]?.src || '',
-            name: variantImages[imgIndex]?.name || '',
-            alt: variantImages[imgIndex]?.alt || '',
-          }));
-        });
-      } else {
-        throw new BadRequestException(
-          'Variants are required when uploading images',
-        );
+    const saveFile = async (file?: Express.Multer.File) => {
+      if (!file) return null;
+      const { fileName } = await this.uploadFile(file);
+      return `/uploads/${fileName}`;
+    };
+
+    if (newAccessory.variants && newAccessory.variants.length > 0) {
+      for (const variant of newAccessory.variants) {
+        for (const img of variant.images) {
+          if (files.frontViewImage && files.frontViewImage.length > 0) {
+            img.frontViewUrl = await saveFile(files.frontViewImage[0]);
+          }
+          if (files.backViewImage && files.backViewImage.length > 0) {
+            img.backViewUrl = await saveFile(files.backViewImage[0]);
+          }
+          if (files.sideViewImage && files.sideViewImage.length > 0) {
+            img.sideViewUrl = await saveFile(files.sideViewImage[0]);
+          }
+        }
       }
+    } else {
+      throw new BadRequestException(
+        'Variants are required when uploading images',
+      );
     }
 
     try {
@@ -64,7 +74,6 @@ export class AccessoryService {
       throw new BadRequestException('Failed to save accessory');
     }
   }
-
   /**
    * Sauvegarde un fichier sur le serveur.
    *
@@ -79,27 +88,6 @@ export class AccessoryService {
     await fs.promises.writeFile(filePath, file.buffer);
 
     return { fileName, path: filePath };
-  }
-
-  /**
-   * Sauvegarde plusieurs fichiers sur le serveur.
-   *
-   * @param {Array<Express.Multer.File>} files - Un tableau de fichiers à sauvegarder.
-   * @returns {Promise<Image[]>} An array of saved image objects. Un tableau d'objets images sauvegardées.
-   */
-  private async saveFiles(files: Array<Express.Multer.File>): Promise<Image[]> {
-    const savedFiles: Image[] = [];
-
-    for (const file of files) {
-      const { fileName, path } = await this.uploadFile(file);
-      savedFiles.push({
-        src: path,
-        name: fileName,
-        alt: file.originalname,
-      });
-    }
-
-    return savedFiles;
   }
 
   async findAll() {
