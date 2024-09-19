@@ -94,4 +94,55 @@ export class ImageService {
     const files = readdirSync(uploadsDir);
     return files.filter((file) => file.includes('BATTERY'));
   }
+
+  /**
+   * @description: renvoie une image depuis le dossier assets/GBC/SIDE grâce à son nom
+   * @param imageName
+   * @returns : une image
+   */
+  renderImageFromGBCSideFolder(imageName: string): string {
+    return join(process.cwd(), 'assets/GBC/SIDE', imageName);
+  }
+
+  getIpsUrlFromGBCSideFolder(): string[] {
+    const uploadsDir = join(process.cwd(), 'assets/GBC/SIDE');
+    const files = readdirSync(uploadsDir);
+    return files.filter((file) => file.includes('IPS'));
+  }
+
+  getStrapUrlFromGBCSideFolder(): string[] {
+    const uploadsDir = join(process.cwd(), 'assets/GBC/SIDE');
+    const files = readdirSync(uploadsDir);
+    return files.filter((file) => file.includes('Strap'));
+  }
+
+  getBtnpUrlFromGBCSideFolder(): string[] {
+    const uploadsDir = join(process.cwd(), 'assets/GBC/SIDE');
+    const files = readdirSync(uploadsDir);
+    return files.filter((file) => file.includes('BOUTONS'));
+  }
+
+  getPadspUrlFromGBCSideFolder(): string[] {
+    const uploadsDir = join(process.cwd(), 'assets/GBC/SIDE');
+    const files = readdirSync(uploadsDir);
+    return files.filter((file) => file.includes('PADS'));
+  }
+
+  getShellpUrlFromGBCSideFolder(): string[] {
+    const uploadsDir = join(process.cwd(), 'assets/GBC/SIDE');
+    const files = readdirSync(uploadsDir);
+    return files.filter((file) => file.includes('SHELL'));
+  }
+
+  getBatterypUrlFromGBCSideFolder(): string[] {
+    const uploadsDir = join(process.cwd(), 'assets/GBC/SIDE');
+    const files = readdirSync(uploadsDir);
+    return files.filter((file) => file.includes('BATTERY'));
+  }
+
+  getLedpUrlFromGBCSideFolder(): string[] {
+    const uploadsDir = join(process.cwd(), 'assets/GBC/SIDE');
+    const files = readdirSync(uploadsDir);
+    return files.filter((file) => file.includes('LED'));
+  }
 }
