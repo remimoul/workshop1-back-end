@@ -8,12 +8,20 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Product } from './schemas/product.schema';
+import WooCommerceRestApi from '@woocommerce/woocommerce-rest-api';
 
 @Injectable()
 export class ProductsService {
-  constructor(
-    @InjectModel(Product.name) private ProductModel: Model<Product>,
-  ) {}
+  private wooCommerce: WooCommerceRestApi;
+
+  constructor(@InjectModel(Product.name) private ProductModel: Model<Product>) {
+    this.wooCommerce = new WooCommerceRestApi({
+      url: process.env.WOOCOMMERCE_URL,
+      consumerKey: process.env.WOOCOMMERCE_USER_KEY,
+      consumerSecret: process.env.WOOCOMMERCE_SECRET_KEY,
+      version: 'wc/v3',
+    });
+  }
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
     const createdProduct = new this.ProductModel(createProductDto);
@@ -67,5 +75,38 @@ export class ProductsService {
     const deletedProduct = await this.ProductModel.findByIdAndDelete(id);
 
     return deletedProduct;
+  }
+
+  async getWoocommerceUrl() {
+    const data = {
+      name: 'F4LL',
+      type: 'grouped',
+      regular_price: '21.99',
+      description: "J'aimerais bien dormir",
+      short_description:
+        'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.',
+      categories: [
+        {
+          id: 9,
+        },
+        {
+          id: 14,
+        },
+      ],
+      images: [
+        {
+          src: 'http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/T_2_back.jpg',
+        },
+      ],
+    };
+    this.wooCommerce
+      .post('products', data)
+      .then((response) => {
+        console.log(response.data);
+        return response;
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+      });
   }
 }
