@@ -39,7 +39,7 @@ export class CategoryService {
   }
 
   async findOne(id: number): Promise<Category> {
-    const category = await this.CategoryModel.find({ id });
+    const category = await this.CategoryModel.findOne({ id });
 
     if (!category)
       throw new NotFoundException(`No category found with the id ${id}`);

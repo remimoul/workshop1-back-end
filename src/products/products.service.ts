@@ -85,33 +85,63 @@ export class ProductsService {
     return deletedProduct;
   }
 
-  async getWoocommerceUrl() {
-    const data = {
-      name: 'F4LL',
-      type: 'grouped',
-      regular_price: '21.99',
-      description: "J'aimerais bien dormir",
-      short_description:
-        'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.',
-      categories: [
-        {
-          id: 9,
-        },
-        {
-          id: 14,
-        },
-      ],
-      images: [
-        {
-          src: 'http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/T_2_back.jpg',
-        },
-      ],
-    };
+  async getWoocommerceUrl(data: CreateProductDto) {
+    // const data = {
+    //   name: 'GameBoy Color',
+    //   type: 'simple',
+    //   description: "Oh wow, c'est une gameboy, comme dans le titre",
+    //   short_description: "Oh wow, c'est une gameboy, comme dans le titre",
+    //   categories: [
+    //     {
+    //       _id: '66eac7719ab2b9ce211b3437',
+    //       id: 1,
+    //       name: 'GameBoy Color',
+    //       price: 24,
+    //       discount: 149,
+    //       __v: 0,
+    //     },
+    //   ],
+    //   images: [
+    //     {
+    //       src: 'https://api-retrometroid.devprod.fr/wp-content/uploads/2024/09/Retro-Game-Wallpaper.jpeg',
+    //     },
+    //   ],
+    //   attributes: [
+    //     {
+    //       name: 'Coque arrière',
+    //       visible: true,
+    //       variation: true,
+    //       options: ['White - #FFF'],
+    //     },
+    //     {
+    //       name: 'Coque arrière',
+    //       visible: true,
+    //       variation: true,
+    //       options: ['Black - #000'],
+    //     },
+    //   ],
+    //   default_attributes: [
+    //     {
+    //       name: 'Coque arrière',
+    //       visible: true,
+    //       variation: true,
+    //       options: ['White - #FFF'],
+    //     },
+    //     {
+    //       name: 'Coque arrière',
+    //       visible: true,
+    //       variation: true,
+    //       options: ['Black - #000'],
+    //     },
+    //   ],
+    // };
     this.wooCommerce
       .post('products', data)
       .then((response) => {
         console.log(response.data);
-        return response;
+        const link =
+          process.env.WOOCOMMERCE_URL + '/?add-to-cart=' + response.data.id;
+        return link;
       })
       .catch((error) => {
         console.log(error.response.data);
