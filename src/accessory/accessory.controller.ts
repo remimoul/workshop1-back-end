@@ -6,18 +6,44 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  UploadedFiles,
+  BadRequestException,
 } from '@nestjs/common';
 import { AccessoryService } from './accessory.service';
 import { CreateAccessoryDto } from './dto/create-accessory.dto';
 import { UpdateAccessoryDto } from './dto/update-accessory.dto';
+import { Express } from 'express';
+import {
+  FileFieldsInterceptor,
+  FilesInterceptor,
+} from '@nestjs/platform-express';
+import { validate } from 'class-validator';
+import { plainToClass } from 'class-transformer';
 
 @Controller('accessory')
 export class AccessoryController {
   constructor(private readonly accessoryService: AccessoryService) {}
 
   @Post('/add')
-  create(@Body() createAccessoryDto: CreateAccessoryDto) {
-    return this.accessoryService.create(createAccessoryDto);
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'images', maxCount: 10 }]))
+  async create(
+    @Body() createAccessoryDto: CreateAccessoryDto,
+    @UploadedFiles() files: { images?: Express.Multer.File[] },
+  ) {
+    console.log('Received DTO:', createAccessoryDto); // Pour le débogage
+
+    // Valider les données
+    const errors = await validate(createAccessoryDto);
+    if (errors.length > 0) {
+      console.log('Validation errors:', errors); // Pour le débogage
+      throw new BadRequestException(errors);
+    }
+
+    return this.accessoryService.create(
+      createAccessoryDto,
+      files?.images || [],
+    );
   }
 
   @Get('/all')

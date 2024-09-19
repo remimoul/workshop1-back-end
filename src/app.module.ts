@@ -8,6 +8,10 @@ import { ProductsModule } from './products/products.module';
 import { AccessoryModule } from './accessory/accessory.module';
 import { CategoryModule } from './category/category.module';
 
+import { MulterModule } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+
 @Module({
   imports: [
     //configModule permet d'utiliser le .env sur Nest.JS
@@ -22,6 +26,16 @@ import { CategoryModule } from './category/category.module';
         uri: configService.get<string>('LOCAL_DB_URI'),
       }),
       inject: [ConfigService],
+    }),
+    MulterModule.register({
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, callback) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          callback(null, `${uniqueSuffix}${extname(file.originalname)}`);
+        },
+      }),
     }),
     ColorModule,
     ProductsModule,
