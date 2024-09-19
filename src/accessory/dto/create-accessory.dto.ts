@@ -44,6 +44,14 @@ class VariantDto {
   @IsOptional()
   @IsBoolean()
   isTransparent?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  default: boolean;
+
+  @IsOptional()
+  @IsNumber()
+  price: number;
 }
 
 export class CreateAccessoryDto {
@@ -60,4 +68,8 @@ export class CreateAccessoryDto {
 
   @IsBoolean()
   isBase: boolean;
+
+  @IsString()
+  @IsOptional()
+  readonly description: string;
 }
