@@ -81,11 +81,11 @@ export class CategoryService {
   }
 
   async remove(id: number): Promise<Category> {
-    const category = await this.CategoryModel.findById(id);
+    const category = await this.CategoryModel.find({ id });
 
     if (!category)
       throw new NotFoundException(`No category found with the id ${id}`);
-    const deletedCategory = await this.CategoryModel.findByIdAndDelete(id);
+    const deletedCategory = await this.CategoryModel.findOneAndDelete({ id });
 
     return deletedCategory;
   }
