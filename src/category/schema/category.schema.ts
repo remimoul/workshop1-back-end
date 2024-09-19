@@ -4,7 +4,7 @@ import { Document, Schema as MongooseSchema } from 'mongoose';
 
 @Schema()
 export class Category {
-  @Prop({ type: Number, unique: true })
+  @Prop({ type: Number })
   id: number;
 
   @Prop()

@@ -1,3 +1,5 @@
+import { CategoryService } from './../category/category.service';
+import { AccessoryService } from './../accessory/accessory.service';
 import {
   Injectable,
   NotFoundException,
@@ -9,12 +11,18 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Product } from './schemas/product.schema';
 import WooCommerceRestApi from '@woocommerce/woocommerce-rest-api';
+import { AddToCartPayload } from 'src/types/addToCartPayload';
+import { Attribute } from 'src/types/attribute';
 
 @Injectable()
 export class ProductsService {
   private wooCommerce: WooCommerceRestApi;
 
-  constructor(@InjectModel(Product.name) private ProductModel: Model<Product>) {
+  constructor(
+    @InjectModel(Product.name) private ProductModel: Model<Product>,
+    private accessoryService: AccessoryService,
+    private categoryService: CategoryService,
+  ) {
     this.wooCommerce = new WooCommerceRestApi({
       url: process.env.WOOCOMMERCE_URL,
       consumerKey: process.env.WOOCOMMERCE_USER_KEY,
@@ -108,5 +116,68 @@ export class ProductsService {
       .catch((error) => {
         console.log(error.response.data);
       });
+  }
+
+  async addToCart(payload: AddToCartPayload) {
+    const payload2: AddToCartPayload = {
+      category_id: 1,
+      applyDiscount: false,
+      options: [
+        {
+          accessoryId: '66ec9f269e09c12798750493',
+          variantId: 1726783271237,
+        },
+        { accessoryId: '66eca047e00bf332b875780d', variantId: 1726783559931 },
+      ],
+    };
+
+    const attributes: Attribute[] = [];
+
+    // Créer un tableau de promesses incluant les options
+    const optionPromises = payload2.options.map(async (option) => {
+      const accessory = await this.accessoryService.findOne(option.accessoryId);
+      const variant = await this.accessoryService.getVariantById(
+        option.variantId,
+      );
+
+      const attribute: Attribute = {
+        name: accessory.name,
+        visible: true,
+        variation: true,
+        options: [`${variant.name} - ${variant.hexcode}`],
+      };
+
+      attributes.push(attribute);
+    });
+
+    // Attendre que toutes les promesses des options soient terminées
+    await Promise.all(optionPromises);
+
+    // Rechercher la catégorie et attendre la promesse
+    const category = await this.categoryService.findOne(payload2.category_id);
+
+    const type = 'simple';
+    const description = "Oh wow, c'est une gameboy, comme dans le titre";
+    const images = [{ src: process.env.IMAGE_URL }];
+
+    // Utiliser category.name comme souhaité
+    console.log('category name: ', category.name);
+    console.log('attributes: ', attributes);
+
+    // Créer l'objet CreateProductDto
+    const createProductDto: CreateProductDto = {
+      name: category.name,
+      type: type,
+      description: description,
+      short_description: description,
+      categories: [category],
+      images: images,
+      attributes: attributes,
+      default_attributes: attributes,
+    };
+
+    console.log('createProductDto: ', createProductDto);
+
+    return createProductDto;
   }
 }
