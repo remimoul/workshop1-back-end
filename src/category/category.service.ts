@@ -51,13 +51,13 @@ export class CategoryService {
     id: number,
     updateCategoryDto: UpdateCategoryDto,
   ): Promise<Category> {
-    const category = await this.CategoryModel.findById(id);
+    const category = await this.CategoryModel.find({ id });
 
     if (!category)
       throw new NotFoundException(`No category found with the id ${id}`);
 
-    const updatedCategory = await this.CategoryModel.findByIdAndUpdate(
-      id,
+    const updatedCategory = await this.CategoryModel.findOneAndUpdate(
+      { id },
       updateCategoryDto,
       { new: true },
     );
