@@ -1,6 +1,5 @@
 import {
   Injectable,
-  ConflictException,
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
@@ -20,6 +19,14 @@ export class AccessoryService {
     @InjectModel(Accessory.name) private accessoryModel: Model<Accessory>,
   ) {}
 
+  /**
+   * Crée un nouvel accessoire avec l'objet data et l'objet images
+   *
+   * @param {CreateAccessoryDto} createAccessoryDto - Les DTO de data.
+   * @param {Array<Express.Multer.File>} files - Tableau de pièces jointes.
+   * @returns {Promise<Accessory>} L'objet accessoire sauvegardé.
+   * @throws {BadRequestException} S'il manque les variants lors de l'upload de l'image ou si la sauvegarde des images échoue.
+   */
   async create(
     createAccessoryDto: CreateAccessoryDto,
     files: Array<Express.Multer.File>,
@@ -58,6 +65,13 @@ export class AccessoryService {
     }
   }
 
+  /**
+   * Sauvegarde un fichier sur le serveur.
+   *
+   * @param {Express.Multer.File} file - Le fichier a sauvegardé.
+   * @returns {Promise<{fileName: string, path: string}>} Un objet contenant le nom et le chemin du fichier.
+   * @throws {Error} Si la sauvegarde échoue.
+   */
   async uploadFile(file: Express.Multer.File) {
     const fileName = `${Date.now()}-${file.originalname}`;
     const filePath = path.join(__dirname, '..', '..', 'uploads', fileName);
@@ -67,6 +81,12 @@ export class AccessoryService {
     return { fileName, path: filePath };
   }
 
+  /**
+   * Sauvegarde plusieurs fichiers sur le serveur.
+   *
+   * @param {Array<Express.Multer.File>} files - Un tableau de fichiers à sauvegarder.
+   * @returns {Promise<Image[]>} An array of saved image objects. Un tableau d'objets images sauvegardées.
+   */
   private async saveFiles(files: Array<Express.Multer.File>): Promise<Image[]> {
     const savedFiles: Image[] = [];
 

@@ -13,11 +13,7 @@ import {
 import { AccessoryService } from './accessory.service';
 import { CreateAccessoryDto } from './dto/create-accessory.dto';
 import { UpdateAccessoryDto } from './dto/update-accessory.dto';
-import { Express } from 'express';
-import {
-  FileFieldsInterceptor,
-  FilesInterceptor,
-} from '@nestjs/platform-express';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
 
