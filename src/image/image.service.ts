@@ -37,4 +37,31 @@ export class ImageService {
     const files = readdirSync(uploadsDir);
     return files.filter((file) => file.includes('Strap'));
   }
+
+  getBatteryUrlFromGBCBackFolder(): string[] {
+    const uploadsDir = join(process.cwd(), 'assets/GBC/BACK');
+    const files = readdirSync(uploadsDir);
+    return files.filter((file) => file.includes('BATTERY'));
+  }
+
+  /**
+   * @description: renvoie une image depuis le dossier assets/GBC/FRONT grâce à son nom
+   * @param imageName
+   * @returns : une image
+   */
+  renderImageFromGBCFrontFolder(imageName: string): string {
+    return join(process.cwd(), 'assets/GBC/FRONT', imageName);
+  }
+
+  getIpsUrlFromGBCFrontFolder(): string[] {
+    const uploadsDir = join(process.cwd(), 'assets/GBC/FRONT');
+    const files = readdirSync(uploadsDir);
+    return files.filter((file) => file.includes('IPS'));
+  }
+
+  getStrapUrlFromGBCFrontFolder(): string[] {
+    const uploadsDir = join(process.cwd(), 'assets/GBC/FRONT');
+    const files = readdirSync(uploadsDir);
+    return files.filter((file) => file.includes('Strap'));
+  }
 }

@@ -36,4 +36,26 @@ export class ImageController {
     const images = this.imageService.getStrapUrlFromGBCBackFolder();
     return res.json(images);
   }
+
+  @Get('/front/:imageName')
+  renderImageFromGBCFrontFolder(
+    @Param('imageName') imageName: string,
+    @Res() res: Response,
+  ) {
+    const imagePath =
+      this.imageService.renderImageFromGBCFrontFolder(imageName);
+    return res.sendFile(imagePath);
+  }
+
+  @Get('front/ips/all')
+  getIpsUrlFromGBCFrontFolder(@Res() res: Response) {
+    const images = this.imageService.getIpsUrlFromGBCFrontFolder();
+    return res.json(images);
+  }
+
+  @Get('front/ips/all')
+  getStrapUrlFromGBCFrontFolder(@Res() res: Response) {
+    const images = this.imageService.getStrapUrlFromGBCFrontFolder();
+    return res.json(images);
+  }
 }
