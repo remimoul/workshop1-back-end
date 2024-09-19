@@ -133,15 +133,16 @@ export class AccessoryService {
   async findByCategory(categoryId: number) {
     const accessories = await this.accessoryModel
       .find({
-        category_id: categoryId,
+        category_id: Number(categoryId), // Conversion explicite
       })
       .lean()
       .exec();
 
-    if (!accessories)
+    if (!accessories || accessories.length === 0) {
       throw new NotFoundException(
-        `No accessories found the category id n°${categoryId}`,
+        `No accessories found for the category id n°${categoryId}`,
       );
+    }
 
     return accessories;
   }

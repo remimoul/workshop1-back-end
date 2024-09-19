@@ -9,8 +9,8 @@ export class Accessory {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Category' })
-  category: Category;
+  @Prop({ required: true, type: Number })
+  category_id: number;
 
   @Prop([Object])
   variants: ColorType[];
