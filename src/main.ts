@@ -10,6 +10,13 @@ async function bootstrap() {
     prefix: '/uploads/',
   });
 
+  const corsOrigins = [
+    process.env.FRONT_URL_DEV,
+    process.env.FRONT_URL_PROD,
+  ].filter(Boolean);
+
+  app.enableCors({ origin: corsOrigins });
+
   await app.listen(3000);
 }
 bootstrap();
