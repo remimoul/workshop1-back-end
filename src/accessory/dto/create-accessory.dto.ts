@@ -27,8 +27,8 @@ class ImageDto {
 }
 
 class VariantDto {
-  // @IsNumber()
-  // id: number;
+  @IsNumber()
+  id: number;
 
   @IsString()
   name: string;

@@ -47,6 +47,8 @@ export class AccessoryService {
 
     if (newAccessory.variants && newAccessory.variants.length > 0) {
       for (const variant of newAccessory.variants) {
+        variant.id = Date.now();
+
         for (const img of variant.images) {
           if (files.frontViewImage && files.frontViewImage.length > 0) {
             img.frontViewUrl = await saveFile(files.frontViewImage[0]);
