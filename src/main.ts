@@ -17,6 +17,8 @@ async function bootstrap() {
 
   app.enableCors({ origin: corsOrigins });
 
-  await app.listen(2424);
+  const port: number = parseInt(process.env.PORT) || 2424;
+
+  await app.listen(port);
 }
 bootstrap();
