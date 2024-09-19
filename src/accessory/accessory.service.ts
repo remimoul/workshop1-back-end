@@ -85,7 +85,12 @@ export class AccessoryService {
     try {
       const savedAccessory = await newAccessory.save();
       console.log('Accessory saved successfully:', savedAccessory);
-      return savedAccessory;
+      const variantIds = savedAccessory.variants.map((variant) => variant.id);
+
+      return {
+        savedAccessory,
+        variantIds,
+      };
     } catch (error) {
       console.error('Error saving accessory:', error);
       throw new BadRequestException('Failed to save accessory');
