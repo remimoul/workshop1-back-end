@@ -10,12 +10,27 @@ async function bootstrap() {
     prefix: '/uploads/',
   });
 
+
   const corsOrigins = [
-    process.env.FRONT_URL_DEV,
-    process.env.FRONT_URL_PROD,
+    process.env.FRONT_URL_DEV || process.env.FRONT_URL_PROD,
   ].filter(Boolean);
 
-  app.enableCors({ origin: corsOrigins });
+  app.enableCors({
+    origin: corsOrigins,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: [
+      'X-CSRF-Token',
+      'X-Requested-With',
+      'Accept',
+      'Accept-Version',
+      'Content-Length',
+      'Content-MD5',
+      'Content-Type',
+      'Date',
+      'X-Api-Version',
+    ],
+    credentials: true,
+  });
 
   const port: number = parseInt(process.env.PORT) || 2424;
 
