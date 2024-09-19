@@ -131,9 +131,12 @@ export class AccessoryService {
   }
 
   async findByCategory(categoryId: number) {
-    const accessories = await this.accessoryModel.find({
-      category_id: categoryId,
-    });
+    const accessories = await this.accessoryModel
+      .find({
+        category_id: categoryId,
+      })
+      .lean()
+      .exec();
 
     if (!accessories)
       throw new NotFoundException(

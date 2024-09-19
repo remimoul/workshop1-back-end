@@ -58,7 +58,7 @@ export class CreateAccessoryDto {
   @IsString()
   name: string;
 
-  @IsString()
+  @IsNumber()
   category_id: string;
 
   @IsArray()
