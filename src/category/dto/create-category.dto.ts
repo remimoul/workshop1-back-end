@@ -12,5 +12,5 @@ export class CreateCategoryDto {
   readonly price: number;
 
   @IsNumber()
-  readonly discount: number;
+  readonly deviceDiscount: number;
 }

@@ -17,5 +17,5 @@ export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {
 
   @IsNumber()
   @IsOptional()
-  readonly discount: number;
+  readonly deviceDiscount: number;
 }

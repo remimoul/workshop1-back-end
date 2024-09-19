@@ -14,7 +14,7 @@ export class Category {
   price: number;
 
   @Prop()
-  discount: number;
+  deviceDiscount: number;
 }
 
 /**

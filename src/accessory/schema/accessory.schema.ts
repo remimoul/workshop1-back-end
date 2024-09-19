@@ -14,6 +14,12 @@ export class Accessory {
 
   @Prop([Object])
   variants: ColorType[];
+
+  @Prop({ required: true })
+  isBase: boolean;
+
+  @Prop({ required: false })
+  description: string;
 }
 
 /**

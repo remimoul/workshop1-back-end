@@ -1,12 +1,75 @@
-import { IsArray, IsString } from 'class-validator';
-import { ColorType } from 'src/types/color';
+import { Type } from 'class-transformer';
+import {
+  IsArray,
+  IsString,
+  IsOptional,
+  ValidateNested,
+  IsBoolean,
+  IsNumber,
+  IsInt,
+} from 'class-validator';
+
+class ImageDto {
+  @IsOptional()
+  @IsString()
+  frontViewUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  backViewUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  sideViewUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+}
+
+class VariantDto {
+  id: number;
+
+  @IsString()
+  name: string;
+
+  @IsString()
+  hexcode: string;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ImageDto)
+  images: ImageDto[];
+
+  @IsOptional()
+  @IsBoolean()
+  isTransparent?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  default: boolean;
+
+  @IsOptional()
+  @IsNumber()
+  price: number;
+}
 
 export class CreateAccessoryDto {
   @IsString()
-  readonly name: string;
+  name: string;
 
-  readonly category_id: any;
+  @IsString()
+  category_id: string;
 
   @IsArray()
-  readonly variants: ColorType[];
+  @ValidateNested({ each: true })
+  @Type(() => VariantDto)
+  variants: VariantDto[];
+
+  @IsBoolean()
+  isBase: boolean;
+
+  @IsString()
+  @IsOptional()
+  readonly description: string;
 }
