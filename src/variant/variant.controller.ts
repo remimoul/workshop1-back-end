@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { VariantService } from './variant.service';
 import { CreateVariantDto } from './dto/create-variant.dto';
 import { UpdateVariantDto } from './dto/update-variant.dto';
@@ -7,12 +15,12 @@ import { UpdateVariantDto } from './dto/update-variant.dto';
 export class VariantController {
   constructor(private readonly variantService: VariantService) {}
 
-  @Post()
+  @Post('/add')
   create(@Body() createVariantDto: CreateVariantDto) {
     return this.variantService.create(createVariantDto);
   }
 
-  @Get()
+  @Get('/all')
   findAll() {
     return this.variantService.findAll();
   }
@@ -20,6 +28,11 @@ export class VariantController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.variantService.findOne(+id);
+  }
+
+  @Get('/accessory/:accessoryId')
+  findByAccessory(@Param('accessoryId') accessoryId: string) {
+    return this.variantService.findByAccessory(accessoryId);
   }
 
   @Patch(':id')

@@ -36,6 +36,17 @@ export class VariantService {
     return variant;
   }
 
+  async findByAccessory(accessoryId: string) {
+    const variants = await this.variantModel.find({
+      accessory_id: accessoryId,
+    });
+    if (!variants)
+      throw new NotFoundException(
+        `No variants found for the accessory with the id ${accessoryId}`,
+      );
+    return variants;
+  }
+
   async update(id: number, updateVariantDto: UpdateVariantDto) {
     const variant = await this.variantModel.find({ id });
 

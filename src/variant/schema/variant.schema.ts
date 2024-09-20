@@ -16,7 +16,7 @@ export class Variant {
   @Prop()
   hexcode: string;
 
-  @Prop([Image])
+  @Prop()
   images: Image[];
 
   @Prop({ required: false, default: false })
@@ -29,15 +29,6 @@ export class Variant {
   price?: number;
 }
 
-/**
- * @description: permet d'avoir un typage précis entre Mongoose et TS,
- * octroie les méthodes mongoose à l'objet Product
- */
 export type VariantDocument = HydratedDocument<Variant>;
 
-/**
- * @param: Class
- * @description: prend la classe TS avec le décorateur '@Schema()' et ses propriétés avec le décorateur '@prop()'
- * @returns Un schéma Mongoose qui peut être utilisé pour créer un modèle ou être configuré davantage
- */
 export const VariantSchema = SchemaFactory.createForClass(Variant);

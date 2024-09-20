@@ -2,7 +2,7 @@ import { PartialType } from '@nestjs/mapped-types';
 import { CreateProductDto } from './create-product.dto';
 import { IsString, IsArray, IsOptional } from 'class-validator';
 import { Category } from 'src/types/category';
-import { Image } from 'src/variant/types/image';
+import { Image } from 'src/types/image';
 import { Attribute } from 'src/types/attribute';
 import { ApiProperty } from '@nestjs/swagger';
 
