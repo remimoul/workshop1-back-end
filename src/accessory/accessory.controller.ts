@@ -12,7 +12,10 @@ import {
 } from '@nestjs/common';
 import { AccessoryService } from './accessory.service';
 import { CreateAccessoryDto, VariantDto } from './dto/create-accessory.dto';
-import { UpdateAccessoryDto } from './dto/update-accessory.dto';
+import {
+  UpdateAccessoryDto,
+  UpdateVariantDto,
+} from './dto/update-accessory.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
@@ -105,5 +108,13 @@ export class AccessoryController {
     @Body() newVariant: VariantDto,
   ) {
     return this.accessoryService.addVariant(accessoryId, newVariant);
+  }
+
+  @Patch('/varient/:varientId')
+  updateVarient(
+    @Param('varientId') varientId: number,
+    @Body() varientDto: UpdateVariantDto,
+  ) {
+    return this.accessoryService.updateVarient(varientId, varientDto);
   }
 }

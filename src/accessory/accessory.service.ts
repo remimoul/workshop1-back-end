@@ -4,7 +4,10 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { CreateAccessoryDto, VariantDto } from './dto/create-accessory.dto';
-import { UpdateAccessoryDto } from './dto/update-accessory.dto';
+import {
+  UpdateAccessoryDto,
+  UpdateVariantDto,
+} from './dto/update-accessory.dto';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Accessory } from './schema/accessory.schema';
@@ -211,5 +214,18 @@ export class AccessoryService {
     console.log('variants: ', accessory.variants);
 
     return updatedAccessory;
+  }
+
+  async updateVarient(varientId, varientDto: UpdateVariantDto) {
+    const varient = await this.accessoryModel.findOne({ id: varientId });
+
+    if (!varient)
+      throw new NotFoundException(`No varients with the id${varientId}`);
+
+    const updatedVarient = await this.accessoryModel.findOneAndUpdate(
+      { id: varientId, varientDto },
+      { new: true },
+    );
+    return updatedVarient;
   }
 }

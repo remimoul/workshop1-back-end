@@ -49,7 +49,7 @@ class UpdateImageDto {
   description?: string;
 }
 
-class UpdateVariantDto {
+export class UpdateVariantDto {
   @IsOptional()
   id: number;
 
