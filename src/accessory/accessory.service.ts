@@ -1,21 +1,19 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
-  BadRequestException,
 } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreateAccessoryDto, VariantDto } from './dto/create-accessory.dto';
 import {
   UpdateAccessoryDto,
   UpdateVariantDto,
 } from './dto/update-accessory.dto';
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
 import { Accessory } from './schema/accessory.schema';
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { Image } from 'src/types/image';
-import { validate } from 'class-validator';
 
 @Injectable()
 export class AccessoryService {
@@ -217,16 +215,34 @@ export class AccessoryService {
     return updatedAccessory;
   }
 
-  async updateVarient(varientId, varientDto: UpdateVariantDto) {
-    const varient = await this.accessoryModel.findOne({ id: varientId });
+  async updateVariant(
+    accessoryId: string,
+    variantId: number,
+    variantDto: UpdateVariantDto,
+  ) {
+    const accessory = await this.accessoryModel.findById(accessoryId);
 
-    if (!varient)
-      throw new NotFoundException(`No varients with the id${varientId}`);
+    console.log(accessory);
+    const variant = accessory.variants.find(
+      (variant) => variant.id.toString() === variantId.toString(),
+    );
+    console.log(variantId);
+    console.log(variant);
 
-    const updatedVarient = await this.accessoryModel.findOneAndUpdate(
-      { id: varientId, varientDto },
+    if (!variant)
+      throw new NotFoundException(`No varients with the id ${variantId}`);
+
+    const updatedVariant = await this.accessoryModel.findByIdAndUpdate(
+      accessoryId,
+      {
+        variants: accessory.variants.map((variant) =>
+          variant.id.toString() === variantId.toString()
+            ? { ...variant, ...variantDto }
+            : variant,
+        ),
+      },
       { new: true },
     );
-    return updatedVarient;
+    return updatedVariant;
   }
 }

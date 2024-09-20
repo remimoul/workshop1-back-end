@@ -1,8 +1,8 @@
-import { IsString, IsArray, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import { IsArray, IsString, ValidateNested } from 'class-validator';
+import { Attribute } from 'src/types/attribute';
 import { Category } from 'src/types/category';
 import { Image } from 'src/types/image';
-import { Attribute } from 'src/types/attribute';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateProductDto {
@@ -30,6 +30,15 @@ export class CreateProductDto {
   })
   readonly description: string;
 
+  @IsString()
+  @ApiProperty({
+    type: String,
+    description: 'description récupéré de accessory.description',
+    example: 'ceci est une coque avant de gameboy colors',
+  })
+  readonly regular_price: string;
+
+  @IsString()
   @IsString()
   @ApiProperty({
     type: String,

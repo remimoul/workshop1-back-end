@@ -1,14 +1,11 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  UseInterceptors,
-  UploadedFiles,
-  BadRequestException,
+  Get,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
 import { AccessoryService } from './accessory.service';
 import { CreateAccessoryDto, VariantDto } from './dto/create-accessory.dto';
@@ -72,11 +69,16 @@ export class AccessoryController {
     return this.accessoryService.addVariant(accessoryId, newVariant);
   }
 
-  @Patch('/varient/:varientId')
+  @Patch('/:accessoryId/variant/:variantId')
   updateVarient(
-    @Param('varientId') varientId: number,
-    @Body() varientDto: UpdateVariantDto,
+    @Param('accessoryId') accessoryId: string,
+    @Param('variantId') variantId: number,
+    @Body() variantDto: UpdateVariantDto,
   ) {
-    return this.accessoryService.updateVarient(varientId, varientDto);
+    return this.accessoryService.updateVariant(
+      accessoryId,
+      variantId,
+      variantDto,
+    );
   }
 }

@@ -1,18 +1,14 @@
-import { CategoryService } from './../category/category.service';
-import { AccessoryService } from './../accessory/accessory.service';
-import {
-  Injectable,
-  NotFoundException,
-  ConflictException,
-} from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
-import { Model } from 'mongoose';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Product } from './schemas/product.schema';
 import WooCommerceRestApi from '@woocommerce/woocommerce-rest-api';
+import { Model } from 'mongoose';
 import { AddToCartPayload } from 'src/types/addToCartPayload';
 import { Attribute } from 'src/types/attribute';
+import { AccessoryService } from './../accessory/accessory.service';
+import { CategoryService } from './../category/category.service';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
+import { Product } from './schemas/product.schema';
 
 @Injectable()
 export class ProductsService {
@@ -99,8 +95,10 @@ export class ProductsService {
   }
 
   async addToCart(payload: AddToCartPayload) {
-    const attributes: Attribute[] = [];
     let description = "Oh wow, c'est une gameboy, comme dans le titre";
+    const category = await this.categoryService.findOne(payload.category_id);
+    const attributes: Attribute[] = [];
+    let basePrice = category.price;
 
     const optionPromises = payload.options.map(async (option) => {
       const accessory = await this.accessoryService.findOne(option.accessoryId);
@@ -120,23 +118,26 @@ export class ProductsService {
         options: [`${variant.name} - ${variant.hexcode}`],
       };
 
+      basePrice += variant.price ?? 0;
       attributes.push(attribute);
     });
 
     await Promise.all(optionPromises);
 
-    const category = await this.categoryService.findOne(payload.category_id);
     const type = 'simple';
     const images = [{ src: process.env.IMAGE_URL }];
 
     console.log('category name: ', category.name);
     console.log('attributes: ', attributes);
 
+    const finalPrice =
+      basePrice - (payload.applyDiscount ? category.deviceDiscount : 0);
     const createProductDto: CreateProductDto = {
       name: category.name,
       type: type,
       description: description,
       short_description: description,
+      regular_price: finalPrice.toString(),
       categories: [category],
       images: images,
       attributes: attributes,
