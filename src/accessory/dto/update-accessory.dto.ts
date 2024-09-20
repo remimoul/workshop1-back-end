@@ -78,4 +78,8 @@ class UpdateVariantDto {
   @IsOptional()
   @IsNumber()
   price: number;
+
+  @IsOptional()
+  @IsBoolean()
+  isDefault?: boolean;
 }

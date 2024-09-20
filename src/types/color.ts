@@ -6,4 +6,5 @@ export interface ColorType {
   hexcode: string;
   images: Image[];
   isTransparent?: boolean;
+  isDefault?: boolean | false;
 }

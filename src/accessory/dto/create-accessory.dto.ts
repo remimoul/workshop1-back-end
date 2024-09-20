@@ -47,6 +47,10 @@ export class VariantDto {
 
   @IsOptional()
   @IsBoolean()
+  isDefault?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
   default: boolean;
 
   @IsOptional()
