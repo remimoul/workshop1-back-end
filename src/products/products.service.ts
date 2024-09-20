@@ -99,23 +99,16 @@ export class ProductsService {
   }
 
   async addToCart(payload: AddToCartPayload) {
-    // const payload2: AddToCartPayload = {
-    //   category_id: 1,
-    //   applyDiscount: false,
-    //   options: [
-    //     {
-    //       accessoryId: '66ec9f269e09c12798750493',
-    //       variantId: 1726783271237,
-    //     },
-    //     { accessoryId: '66eca047e00bf332b875780d', variantId: 1726783559931 },
-    //   ],
-    // };
-
     const attributes: Attribute[] = [];
+    let description = "Oh wow, c'est une gameboy, comme dans le titre";
 
-    // Créer un tableau de promesses incluant les options
     const optionPromises = payload.options.map(async (option) => {
       const accessory = await this.accessoryService.findOne(option.accessoryId);
+
+      if (accessory.description) {
+        description = accessory.description;
+      }
+
       const variant = await this.accessoryService.getVariantById(
         option.variantId,
       );
@@ -133,9 +126,7 @@ export class ProductsService {
     await Promise.all(optionPromises);
 
     const category = await this.categoryService.findOne(payload.category_id);
-
     const type = 'simple';
-    const description = "Oh wow, c'est une gameboy, comme dans le titre";
     const images = [{ src: process.env.IMAGE_URL }];
 
     console.log('category name: ', category.name);
