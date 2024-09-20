@@ -12,6 +12,7 @@ import { diskStorage } from 'multer';
 import { extname, join } from 'path';
 import { ImageModule } from './image/image.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { VariantModule } from './variant/variant.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     AccessoryModule,
     CategoryModule,
     ImageModule,
+    VariantModule,
   ],
   controllers: [AppController],
   providers: [AppService],
