@@ -11,7 +11,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { AccessoryService } from './accessory.service';
-import { CreateAccessoryDto } from './dto/create-accessory.dto';
+import { CreateAccessoryDto, VariantDto } from './dto/create-accessory.dto';
 import { UpdateAccessoryDto } from './dto/update-accessory.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { validate } from 'class-validator';
@@ -97,5 +97,13 @@ export class AccessoryController {
   @Get('/variant/:variantId')
   getVariantById(@Param('variantId') variantId: string) {
     return this.accessoryService.getVariantById(+variantId);
+  }
+
+  @Patch('/:accessoryId/variant')
+  addVariant(
+    @Param('accessoryId') accessoryId: string,
+    @Body() newVariant: VariantDto,
+  ) {
+    return this.accessoryService.addVariant(accessoryId, newVariant);
   }
 }

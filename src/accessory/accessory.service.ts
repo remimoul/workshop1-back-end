@@ -3,7 +3,7 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { CreateAccessoryDto } from './dto/create-accessory.dto';
+import { CreateAccessoryDto, VariantDto } from './dto/create-accessory.dto';
 import { UpdateAccessoryDto } from './dto/update-accessory.dto';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -189,5 +189,27 @@ export class AccessoryService {
     }
     console.log(variantId);
     return accessory.variants[0];
+  }
+
+  async addVariant(accessoryId: string, newVariant: VariantDto) {
+    const accessory = await this.accessoryModel.findById(accessoryId);
+
+    if (!accessory) {
+      throw new NotFoundException(`No accessories with id ${accessoryId}`);
+    }
+
+    newVariant.id = Date.now() + Math.floor(Math.random() * 1000);
+
+    accessory.variants.push(newVariant);
+
+    const updatedAccessory = await this.accessoryModel.findByIdAndUpdate(
+      accessoryId, // Utilisez l'identifiant ici
+      { variants: accessory.variants }, // Mettez à jour uniquement les variants
+      { new: true }, // Retourne le document mis à jour
+    );
+
+    console.log('variants: ', accessory.variants);
+
+    return updatedAccessory;
   }
 }

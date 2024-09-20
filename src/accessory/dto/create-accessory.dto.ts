@@ -27,7 +27,7 @@ class ImageDto {
   description?: string;
 }
 
-class VariantDto {
+export class VariantDto {
   id: number;
 
   @IsString()
