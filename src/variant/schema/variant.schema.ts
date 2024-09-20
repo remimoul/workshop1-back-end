@@ -7,6 +7,9 @@ export class Variant {
   @Prop({ required: true })
   id: number;
 
+  @Prop({ required: true })
+  accessory_id: string;
+
   @Prop()
   name: string;
 

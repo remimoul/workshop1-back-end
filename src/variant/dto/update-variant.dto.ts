@@ -25,12 +25,21 @@ export class UpdateVariantDto extends PartialType(CreateVariantDto) {
 
   @ApiProperty({
     type: String,
+    description: "id de l'accessoire auquel le variant appartient",
+    example: '66ec9f269e09c12798750493',
+  })
+  @IsString()
+  @IsOptional()
+  readonly accessory_id: string;
+
+  @ApiProperty({
+    type: String,
     description: 'Nom du variant, généralement une couleur',
     examples: ['Purple', 'DarkGreen', 'ClearBlue'],
   })
   @IsOptional()
   @IsString()
-  name: string;
+  readonly name: string;
 
   @ApiProperty({
     type: String,
@@ -40,7 +49,7 @@ export class UpdateVariantDto extends PartialType(CreateVariantDto) {
   })
   @IsString()
   @IsOptional()
-  hexcode: string;
+  readonly hexcode: string;
 
   @ApiProperty({
     type: Array,
@@ -55,7 +64,7 @@ export class UpdateVariantDto extends PartialType(CreateVariantDto) {
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => Object)
-  images: Image[];
+  readonly images: Image[];
 
   @ApiProperty({
     type: Boolean,
@@ -65,7 +74,7 @@ export class UpdateVariantDto extends PartialType(CreateVariantDto) {
   })
   @IsBoolean()
   @IsOptional()
-  isDefault: boolean;
+  readonly isDefault: boolean;
 
   @ApiProperty({
     type: Number,
@@ -75,7 +84,7 @@ export class UpdateVariantDto extends PartialType(CreateVariantDto) {
   })
   @IsNumber()
   @IsOptional()
-  price?: number;
+  readonly price?: number;
 
   @ApiProperty({
     type: Boolean,
@@ -84,5 +93,5 @@ export class UpdateVariantDto extends PartialType(CreateVariantDto) {
   })
   @IsBoolean()
   @IsOptional()
-  isTransparent?: boolean;
+  readonly isTransparent?: boolean;
 }

@@ -22,11 +22,19 @@ export class CreateVariantDto {
 
   @ApiProperty({
     type: String,
+    description: "id de l'accessoire auquel le variant appartient",
+    example: '66ec9f269e09c12798750493',
+  })
+  @IsString()
+  readonly accessory_id: string;
+
+  @ApiProperty({
+    type: String,
     description: 'Nom du variant, généralement une couleur',
     examples: ['Purple', 'DarkGreen', 'ClearBlue'],
   })
   @IsString()
-  name: string;
+  readonly name: string;
 
   @ApiProperty({
     type: String,
@@ -35,7 +43,7 @@ export class CreateVariantDto {
     example: '#OOO',
   })
   @IsString()
-  hexcode: string;
+  readonly hexcode: string;
 
   @ApiProperty({
     type: Array,
@@ -49,7 +57,7 @@ export class CreateVariantDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => Object)
-  images: Image[];
+  readonly images: Image[];
 
   @ApiProperty({
     type: Boolean,
@@ -58,7 +66,7 @@ export class CreateVariantDto {
     examples: [true, false],
   })
   @IsBoolean()
-  isDefault: boolean;
+  readonly isDefault: boolean;
 
   @ApiProperty({
     type: Number,
@@ -68,7 +76,7 @@ export class CreateVariantDto {
   })
   @IsNumber()
   @IsOptional()
-  price?: number;
+  readonly price?: number;
 
   @ApiProperty({
     type: Boolean,
@@ -77,5 +85,5 @@ export class CreateVariantDto {
   })
   @IsBoolean()
   @IsOptional()
-  isTransparent?: boolean;
+  readonly isTransparent?: boolean;
 }
