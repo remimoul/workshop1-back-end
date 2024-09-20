@@ -35,7 +35,7 @@ async function bootstrap() {
   const port: number = parseInt(process.env.PORT) || 2424;
 
   const config = new DocumentBuilder()
-    .setTitle('Workshop 1')
+    .setTitle('Retro Metroid API')
     .setDescription('The cats API description')
     .setVersion('1.0')
     .addTag('accessories')
