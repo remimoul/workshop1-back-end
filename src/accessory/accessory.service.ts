@@ -96,10 +96,8 @@ export class AccessoryService {
   // }
 
   async create(createAccessoryDto: CreateAccessoryDto) {
-    // Créez directement une nouvelle instance du modèle avec les données du DTO
     const accessory = new this.accessoryModel(createAccessoryDto);
 
-    // Sauvegardez l'accessoire et retournez le résultat
     return accessory.save();
   }
 
