@@ -1,0 +1,32 @@
+version: '3.8'
+
+networks:
+  workshop1-backend: {}
+
+services:
+  api:
+    build:
+      context: .
+    ports:
+      - '4000:4000'
+    environment:
+      - LOCAL_DB_URI=${LOCAL_DB_URI}
+      - PORT=${PORT}
+      - FRONT_URL_PROD=${FRONT_URL_PROD}
+      - FRONT_URL_DEV=${FRONT_URL_DEV}
+      - WOOCOMMERCE_URL=${WOOCOMMERCE_URL}
+      - WOOCOMMERCE_USER_KEY=${WOOCOMMERCE_USER_KEY}
+      - WOOCOMMERCE_SECRET_KEY=${WOOCOMMERCE_SECRET_KEY}
+    depends_on:
+      - mongo
+    networks:
+      - workshop1-backend
+
+  mongo:
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+    ports:
+      - '27017:27017'
+    networks:
+      - workshop1-backend
