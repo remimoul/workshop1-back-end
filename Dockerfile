@@ -1,8 +1,8 @@
-###################
-# BUILD FOR LOCAL DEVELOPMENT
-###################
+# ###################
+# # BUILD FOR LOCAL DEVELOPMENT
+# ###################
 
-FROM node:18-alpine As development
+FROM node:18-alpine AS development
 
 # Create app directory
 WORKDIR /app
@@ -21,11 +21,11 @@ COPY --chown=node:node . .
 # Use the node user from the image (instead of the root user)
 USER node
 
-###################
-# BUILD FOR PRODUCTION
-###################
+# ###################
+# # BUILD FOR PRODUCTION
+# ###################
 
-FROM node:18-alpine As build
+FROM node:18-alpine AS build
 
 WORKDIR /app
 
@@ -51,13 +51,13 @@ USER node
 # PRODUCTION
 ###################
 
-FROM node:18-alpine As production
+FROM node:18-alpine AS production
 
 # Copy the bundled code from the build stage to the production image
 COPY --chown=node:node --from=build /app/node_modules ./node_modules
 COPY --chown=node:node --from=build /app/dist ./dist
 
-EXPOSE 3000
+EXPOSE 4000
 
 # Start the server using the production build
 CMD [ "node", "dist/main.js" ]
