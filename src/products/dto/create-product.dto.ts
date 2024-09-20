@@ -2,7 +2,7 @@ import { Type } from 'class-transformer';
 import { IsArray, IsString, ValidateNested } from 'class-validator';
 import { Attribute } from 'src/types/attribute';
 import { Category } from 'src/types/category';
-import { Image } from 'src/variant/types/image';
+import { Image } from 'src/types/image';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateProductDto {

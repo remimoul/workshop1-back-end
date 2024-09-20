@@ -17,13 +17,13 @@ export class Variant {
   images: Image[];
 
   @Prop({ required: false, default: false })
-  isTransparent: boolean;
+  isTransparent?: boolean;
 
   @Prop()
   isDefault: boolean;
 
   @Prop({ required: false, default: 0 })
-  price: number;
+  price?: number;
 }
 
 /**
