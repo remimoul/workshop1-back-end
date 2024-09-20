@@ -245,4 +245,65 @@ export class AccessoryService {
     );
     return updatedVariant;
   }
+
+  async addImageToVariant(
+    accessoryId: string,
+    variantId: number,
+    file: Express.Multer.File,
+    field: string,
+  ) {
+    const accessory = await this.accessoryModel.findById(accessoryId);
+
+    if (!accessory) {
+      throw new NotFoundException(`No accessories with id ${accessoryId}`);
+    }
+
+    const variant = accessory.variants.find(
+      (variant) => variant.id.toString() === variantId.toString(),
+    );
+
+    if (!variant) {
+      throw new NotFoundException(`No variants with id ${variantId}`);
+    }
+
+    if (!file) {
+      throw new BadRequestException('File is required');
+    }
+
+    const allowedFields = ['frontViewUrl', 'backViewUrl', 'sideViewUrl'];
+
+    if (!allowedFields.includes(field)) {
+      throw new BadRequestException('Invalid field');
+    }
+
+    const { fileName } = await this.uploadFile(file);
+
+    if (variant.images) {
+      if (variant.images.some((image) => image[field])) {
+        variant.images.map((image) => {
+          if (image[field]) {
+            image[field] = fileName;
+          }
+        });
+      } else {
+        variant.images.push({
+          [field]: fileName,
+        });
+      }
+    } else {
+      variant.images = [{ [field]: fileName }];
+    }
+
+    const updatedAccessory = await this.accessoryModel.findByIdAndUpdate(
+      accessoryId,
+      {
+        variants: accessory.variants.map((v) =>
+          v.id.toString() === variantId.toString() ? variant : v,
+        ),
+      },
+      { new: true },
+    );
+
+    return updatedAccessory;
+  }
 }
