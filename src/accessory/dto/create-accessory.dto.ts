@@ -66,9 +66,10 @@ export class CreateAccessoryDto {
   category_id: number;
 
   @IsArray()
+  @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => VariantDto)
-  variants: VariantDto[];
+  variants?: VariantDto[];
 
   @IsBoolean()
   isBase: boolean;

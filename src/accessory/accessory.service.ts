@@ -31,73 +31,76 @@ export class AccessoryService {
    * @returns {Promise<Accessory>} L'objet accessoire sauvegardé.
    * @throws {BadRequestException} S'il manque les variants lors de l'upload de l'image ou si la sauvegarde des images échoue.
    */
-  async create(
-    createAccessoryDto: CreateAccessoryDto,
-    files: {
-      frontViewImage?: Express.Multer.File[];
-      backViewImage?: Express.Multer.File[];
-      sideViewImage?: Express.Multer.File[];
-    },
-  ) {
-    console.log('Creating accessory with DTO:', createAccessoryDto);
+  // async create(
+  //   createAccessoryDto: CreateAccessoryDto,
 
-    // Ajouter un id à chaque variant avant la validation
-    if (createAccessoryDto.variants && createAccessoryDto.variants.length > 0) {
-      createAccessoryDto.variants = createAccessoryDto.variants.map(
-        (variant) => ({
-          ...variant,
-          id: Date.now() + Math.floor(Math.random() * 1000), // Pour éviter les doublons
-        }),
-      );
-    }
+  // ) {
 
-    // Valider le DTO modifié
-    const errors = await validate(createAccessoryDto);
-    if (errors.length > 0) {
-      throw new BadRequestException(errors);
-    }
+  //   // Ajouter un id à chaque variant avant la validation
+  //   if (createAccessoryDto.variants && createAccessoryDto.variants.length > 0) {
+  //     createAccessoryDto.variants = createAccessoryDto.variants.map(
+  //       (variant) => ({
+  //         ...variant,
+  //         id: Date.now() + Math.floor(Math.random() * 1000), // Pour éviter les doublons
+  //       }),
+  //     );
+  //   }
 
-    const newAccessory = new this.accessoryModel(createAccessoryDto);
+  //   // Valider le DTO modifié
+  //   const errors = await validate(createAccessoryDto);
+  //   if (errors.length > 0) {
+  //     throw new BadRequestException(errors);
+  //   }
 
-    const saveFile = async (file?: Express.Multer.File) => {
-      if (!file) return null;
-      const { fileName } = await this.uploadFile(file);
-      return `/uploads/${fileName}`;
-    };
+  //   const newAccessory = new this.accessoryModel(createAccessoryDto);
 
-    if (newAccessory.variants && newAccessory.variants.length > 0) {
-      for (const variant of newAccessory.variants) {
-        for (const img of variant.images) {
-          if (files.frontViewImage && files.frontViewImage.length > 0) {
-            img.frontViewUrl = await saveFile(files.frontViewImage[0]);
-          }
-          if (files.backViewImage && files.backViewImage.length > 0) {
-            img.backViewUrl = await saveFile(files.backViewImage[0]);
-          }
-          if (files.sideViewImage && files.sideViewImage.length > 0) {
-            img.sideViewUrl = await saveFile(files.sideViewImage[0]);
-          }
-        }
-      }
-    } else {
-      throw new BadRequestException(
-        'Variants are required when uploading images',
-      );
-    }
+  //   const saveFile = async (file?: Express.Multer.File) => {
+  //     if (!file) return null;
+  //     const { fileName } = await this.uploadFile(file);
+  //     return `/uploads/${fileName}`;
+  //   };
 
-    try {
-      const savedAccessory = await newAccessory.save();
-      console.log('Accessory saved successfully:', savedAccessory);
-      const variantIds = savedAccessory.variants.map((variant) => variant.id);
+  //   if (newAccessory.variants && newAccessory.variants.length > 0) {
+  //     for (const variant of newAccessory.variants) {
+  //       for (const img of variant.images) {
+  //         if (files.frontViewImage && files.frontViewImage.length > 0) {
+  //           img.frontViewUrl = await saveFile(files.frontViewImage[0]);
+  //         }
+  //         if (files.backViewImage && files.backViewImage.length > 0) {
+  //           img.backViewUrl = await saveFile(files.backViewImage[0]);
+  //         }
+  //         if (files.sideViewImage && files.sideViewImage.length > 0) {
+  //           img.sideViewUrl = await saveFile(files.sideViewImage[0]);
+  //         }
+  //       }
+  //     }
+  //   } else {
+  //     throw new BadRequestException(
+  //       'Variants are required when uploading images',
+  //     );
+  //   }
 
-      return {
-        savedAccessory,
-        variantIds,
-      };
-    } catch (error) {
-      console.error('Error saving accessory:', error);
-      throw new BadRequestException('Failed to save accessory');
-    }
+  //   try {
+  //     const savedAccessory = await newAccessory.save();
+  //     console.log('Accessory saved successfully:', savedAccessory);
+  //     const variantIds = savedAccessory.variants.map((variant) => variant.id);
+
+  //     return {
+  //       savedAccessory,
+  //       variantIds,
+  //     };
+  //   } catch (error) {
+  //     console.error('Error saving accessory:', error);
+  //     throw new BadRequestException('Failed to save accessory');
+  //   }
+  // }
+
+  async create(createAccessoryDto: CreateAccessoryDto) {
+    // Créez directement une nouvelle instance du modèle avec les données du DTO
+    const accessory = new this.accessoryModel(createAccessoryDto);
+
+    // Sauvegardez l'accessoire et retournez le résultat
+    return accessory.save();
   }
 
   /**

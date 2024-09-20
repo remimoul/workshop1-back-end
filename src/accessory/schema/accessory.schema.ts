@@ -13,7 +13,7 @@ export class Accessory {
   category_id: number;
 
   @Prop([Object])
-  variants: ColorType[];
+  variants?: ColorType[];
 
   @Prop({ required: true })
   isBase: boolean;
