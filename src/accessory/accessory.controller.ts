@@ -19,7 +19,9 @@ import {
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('accessories')
 @Controller('accessory')
 export class AccessoryController {
   constructor(private readonly accessoryService: AccessoryService) {}

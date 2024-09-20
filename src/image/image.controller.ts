@@ -2,7 +2,9 @@ import { Controller, Get, Param, Res } from '@nestjs/common';
 import { ImageService } from './image.service';
 import { Response } from 'express';
 import { join } from 'path';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('images')
 @Controller('images')
 export class ImageController {
   constructor(private readonly imageService: ImageService) {}

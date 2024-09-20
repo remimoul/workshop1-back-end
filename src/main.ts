@@ -35,10 +35,11 @@ async function bootstrap() {
   const port: number = parseInt(process.env.PORT) || 2424;
 
   const config = new DocumentBuilder()
-    .setTitle('Cats example')
+    .setTitle('Workshop 1')
     .setDescription('The cats API description')
     .setVersion('1.0')
-    .addTag('cats')
+    .addTag('accessories')
+    .addTag('products')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

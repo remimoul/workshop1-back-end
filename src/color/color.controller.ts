@@ -10,7 +10,9 @@ import {
 import { ColorService } from './color.service';
 import { CreateColorDto } from './dto/create-color.dto';
 import { UpdateColorDto } from './dto/update-color.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('colors')
 @Controller('colors')
 export class ColorController {
   constructor(private readonly colorService: ColorService) {}
