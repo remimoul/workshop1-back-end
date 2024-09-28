@@ -1,3 +1,5 @@
+import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { RefreshToken } from './schema/refresh-token.schema';
 import {
   Injectable,
   NotFoundException,
@@ -12,11 +14,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schema/user.schema';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
+    @InjectModel(RefreshToken.name)
+    private refreshTokenModel: Model<RefreshToken>,
     private jwtService: JwtService,
   ) {}
 
@@ -35,7 +40,7 @@ export class AuthService {
     return newUser.save();
   }
 
-  async login(loginDto: CreateAuthDto): Promise<{ access_token: string }> {
+  async login(loginDto: CreateAuthDto) {
     const { email, password } = loginDto;
     const user = await this.userModel.findOne({ email });
 
@@ -49,8 +54,13 @@ export class AuthService {
 
     const payload = { id: user._id.toString(), email: user.email };
 
+    const refreshToken = uuidv4();
+
+    await this.storeRefreshToken(refreshToken, user.id);
+
     return {
       access_token: await this.jwtService.signAsync(payload),
+      RefreshToken,
     };
   }
 
@@ -107,4 +117,12 @@ export class AuthService {
 
     return deletedUser;
   }
+
+  async storeRefreshToken(token: string, userId: string) {
+    const date = new Date();
+    const expiryDate = new Date(date.getDate() + 4);
+    await this.refreshTokenModel.create({ token, userId, expiryDate });
+  }
+
+  async refreshTokens(refreshToken: string) {}
 }

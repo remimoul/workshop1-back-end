@@ -1,3 +1,4 @@
+import { RefreshToken } from './schema/refresh-token.schema';
 import {
   Controller,
   Get,
@@ -12,6 +13,7 @@ import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { AuthGuard } from './auth.guard';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @Controller('users')
 export class AuthController {
@@ -25,6 +27,11 @@ export class AuthController {
   @Post('/login')
   login(@Body() loginDto: CreateAuthDto) {
     return this.authService.login(loginDto);
+  }
+
+  @Post('refresh')
+  RefreshTokens(@Body() RefreshTokenDto: RefreshTokenDto) {
+    return this.authService.refreshTokens(RefreshTokenDto.token);
   }
 
   @Get('/all')
