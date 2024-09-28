@@ -15,12 +15,17 @@ import { UpdateAuthDto } from './dto/update-auth.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post()
-  create(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.create(createAuthDto);
+  @Post('/signup')
+  signup(@Body() signupDto: CreateAuthDto) {
+    return this.authService.signup(signupDto);
   }
 
-  @Get()
+  @Post('/login')
+  login(@Body() loginDto: CreateAuthDto) {
+    return this.authService.login(loginDto);
+  }
+
+  @Get('/all')
   findAll() {
     return this.authService.findAll();
   }
