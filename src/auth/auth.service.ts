@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schema/user.schema';
 import { JwtService } from '@nestjs/jwt';
@@ -47,7 +47,7 @@ export class AuthService {
     if (!isMatch)
       throw new BadRequestException('Wrong combination of email and password');
 
-    const payload = { id: user.id, email: user.email };
+    const payload = { id: user._id.toString(), email: user.email };
 
     return {
       access_token: await this.jwtService.signAsync(payload),
@@ -62,21 +62,29 @@ export class AuthService {
     return users;
   }
 
-  async findOne(id: number): Promise<User> {
-    const user = await this.userModel.findById(id);
+  async findOne(id: string): Promise<User> {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid user ID');
+    }
+
+    const user = await this.userModel.findById(new Types.ObjectId(id));
 
     if (!user) throw new NotFoundException(`No users found with the id ${id}`);
 
     return user;
   }
 
-  async update(id: number, updateAuthDto: UpdateAuthDto): Promise<User> {
-    const user = await this.userModel.findById(id);
+  async update(id: string, updateAuthDto: UpdateAuthDto): Promise<User> {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid user ID');
+    }
+
+    const user = await this.userModel.findById(new Types.ObjectId(id));
 
     if (!user) throw new NotFoundException(`No user found with the id n°${id}`);
 
     const updatedUser = await this.userModel.findByIdAndUpdate(
-      id,
+      new Types.ObjectId(id),
       updateAuthDto,
       { new: true },
     );
@@ -84,12 +92,18 @@ export class AuthService {
     return updatedUser;
   }
 
-  async remove(id: number): Promise<User> {
-    const user = await this.userModel.findById(id);
+  async remove(id: string): Promise<User> {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid user ID');
+    }
+
+    const user = await this.userModel.findById(new Types.ObjectId(id));
 
     if (!user) throw new NotFoundException(`No user found with the id n°${id}`);
 
-    const deletedUser = await this.userModel.findByIdAndDelete(id);
+    const deletedUser = await this.userModel.findByIdAndDelete(
+      new Types.ObjectId(id),
+    );
 
     return deletedUser;
   }
