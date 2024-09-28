@@ -32,7 +32,7 @@ export class AuthService {
 
     if (!newUser) throw new BadRequestException('Unable to create the user');
 
-    return newUser;
+    return newUser.save();
   }
 
   async login(loginDto: CreateAuthDto): Promise<{ access_token: string }> {
@@ -42,7 +42,7 @@ export class AuthService {
     if (!user)
       throw new BadRequestException('Wrong combination of email and password');
 
-    const isMatch = await bcrypt.compare(password, user.email);
+    const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch)
       throw new BadRequestException('Wrong combination of email and password');
