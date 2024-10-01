@@ -1,14 +1,16 @@
-import { HydratedDocument } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema as MongooseSchema } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 
 @Schema()
 export class Category {
-  @Prop({ type: Number, unique: true })
+  @Prop({ type: Number })
   id: number;
 
   @Prop()
   name: string;
+
+  @Prop()
+  slug: string;
 
   @Prop()
   price: number;

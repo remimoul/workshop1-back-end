@@ -7,19 +7,22 @@ import { ColorModule } from './color/color.module';
 import { ProductsModule } from './products/products.module';
 import { AccessoryModule } from './accessory/accessory.module';
 import { CategoryModule } from './category/category.module';
-
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { AuthModule } from './auth/auth.module';
+import { extname, join } from 'path';
+import { ImageModule } from './image/image.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { VariantModule } from './variant/variant.module';
 
 @Module({
   imports: [
-    //configModule permet d'utiliser le .env sur Nest.JS
+    // ConfigModule pour utiliser le .env sur Nest.JS
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
     }),
-    // configModule est injecter dans le MongooseModule pour pouvoir utiliser les variables d'env dedans
+    // ConfigModule est injecté dans le MongooseModule pour utiliser les variables d'env
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -37,10 +40,16 @@ import { extname } from 'path';
         },
       }),
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+    }),
     ColorModule,
     ProductsModule,
     AccessoryModule,
     CategoryModule,
+    AuthModule,
+    ImageModule,
+    VariantModule,
   ],
   controllers: [AppController],
   providers: [AppService],

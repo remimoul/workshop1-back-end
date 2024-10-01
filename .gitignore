@@ -2,8 +2,6 @@
 /dist
 /node_modules
 /build
-/assets
-/uploads
 
 # Logs
 logs
@@ -31,6 +29,7 @@ lerna-debug.log*
 *.sublime-workspace
 
 # IDE - VSCode
+.vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -53,6 +52,7 @@ pids
 *.pid
 *.seed
 *.pid.lock
+/uploads
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
