@@ -12,5 +12,6 @@ import { Accessory, AccessorySchema } from './schema/accessory.schema';
   ],
   controllers: [AccessoryController],
   providers: [AccessoryService],
+  exports: [AccessoryService],
 })
 export class AccessoryModule {}

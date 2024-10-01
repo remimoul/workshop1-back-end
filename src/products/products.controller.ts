@@ -10,6 +10,7 @@ import {
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { AddToCartPayload } from 'src/types/addToCartPayload';
 
 @Controller('products')
 export class ProductsController {
@@ -38,5 +39,15 @@ export class ProductsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.productsService.remove(id);
+  }
+
+  // @Post('/woo')
+  // getWoocommerceUrl() {
+  //   return this.productsService.getWoocommerceUrl();
+  // }
+
+  @Post('cart')
+  async addToCart(@Body() payload: AddToCartPayload): Promise<string> {
+    return this.productsService.addToCart(payload);
   }
 }
