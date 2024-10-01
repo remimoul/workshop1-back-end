@@ -9,7 +9,6 @@ import { AccessoryModule } from './accessory/accessory.module';
 import { CategoryModule } from './category/category.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { extname } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { extname, join } from 'path';
 import { ImageModule } from './image/image.module';

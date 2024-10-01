@@ -29,10 +29,10 @@ export class AuthController {
     return this.authService.login(loginDto);
   }
 
-  @Post('refresh')
-  RefreshTokens(@Body() RefreshTokenDto: RefreshTokenDto) {
-    return this.authService.refreshTokens(RefreshTokenDto.token);
-  }
+  // @Post('refresh')
+  // RefreshTokens(@Body() RefreshTokenDto: RefreshTokenDto) {
+  //   return this.authService.refreshTokens(RefreshTokenDto.token);
+  // }
 
   @Get('/all')
   findAll() {
