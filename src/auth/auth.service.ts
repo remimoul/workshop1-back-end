@@ -4,8 +4,6 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
-  ConflictException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
@@ -32,7 +30,6 @@ export class AuthService {
     if (user) throw new BadRequestException('Unable to create the user');
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
     const newUser = new this.userModel({ email, password: hashedPassword });
 
     if (!newUser) throw new BadRequestException('Unable to create the user');
@@ -56,11 +53,18 @@ export class AuthService {
 
     const refreshToken = uuidv4();
 
+    const refreshTokenExists = await this.refreshTokenModel.find({
+      userId: user._id,
+    });
+
+    if (refreshTokenExists) {
+      await this.refreshTokenModel.findOneAndDelete({ userId: user._id });
+    }
     await this.storeRefreshToken(refreshToken, user.id);
 
     return {
       access_token: await this.jwtService.signAsync(payload),
-      RefreshToken,
+      refresh_token: refreshToken,
     };
   }
 
@@ -118,11 +122,10 @@ export class AuthService {
     return deletedUser;
   }
 
-  async storeRefreshToken(token: string, userId: string) {
+  async storeRefreshToken(token: string, userId: string): Promise<string> {
     const date = new Date();
-    const expiryDate = new Date(date.getDate() + 4);
+    const expiryDate = new Date(date.getTime() + 4 * 24 * 60 * 60 * 1000);
     await this.refreshTokenModel.create({ token, userId, expiryDate });
+    return token;
   }
-
-  async refreshTokens(refreshToken: string) {}
 }
