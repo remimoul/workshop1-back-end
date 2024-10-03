@@ -21,7 +21,7 @@ export class UpdateVariantDto extends PartialType(CreateVariantDto) {
   })
   @IsNumber()
   @IsOptional()
-  id: number;
+  id?: number;
 
   @ApiProperty({
     type: String,
@@ -30,7 +30,7 @@ export class UpdateVariantDto extends PartialType(CreateVariantDto) {
   })
   @IsString()
   @IsOptional()
-  readonly accessory_id: string;
+  readonly accessory_id?: string;
 
   @ApiProperty({
     type: String,
@@ -39,7 +39,7 @@ export class UpdateVariantDto extends PartialType(CreateVariantDto) {
   })
   @IsOptional()
   @IsString()
-  readonly name: string;
+  readonly name?: string;
 
   @ApiProperty({
     type: String,
@@ -49,7 +49,7 @@ export class UpdateVariantDto extends PartialType(CreateVariantDto) {
   })
   @IsString()
   @IsOptional()
-  readonly hexcode: string;
+  readonly hexcode?: string;
 
   @ApiProperty({
     type: Array,
@@ -64,7 +64,7 @@ export class UpdateVariantDto extends PartialType(CreateVariantDto) {
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => Object)
-  readonly images: Image[];
+  readonly images?: Image[];
 
   @ApiProperty({
     type: Boolean,
@@ -74,7 +74,7 @@ export class UpdateVariantDto extends PartialType(CreateVariantDto) {
   })
   @IsBoolean()
   @IsOptional()
-  readonly isDefault: boolean;
+  readonly isDefault?: boolean;
 
   @ApiProperty({
     type: Number,
