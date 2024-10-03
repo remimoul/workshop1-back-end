@@ -18,34 +18,10 @@ export class AccessoryService {
     @InjectModel(Accessory.name) private accessoryModel: Model<Accessory>,
   ) {}
 
-  /**
-   * Crée un nouvel accessoire avec l'objet data et l'objet images
-   *
-   * @param {CreateAccessoryDto} createAccessoryDto - Les DTO de data.
-   * @param {Array<Express.Multer.File>} files - Tableau de pièces jointes.
-   * @returns {Promise<Accessory>} L'objet accessoire sauvegardé.
-   * @throws {BadRequestException} S'il manque les variants lors de l'upload de l'image ou si la sauvegarde des images échoue.
-   */
   async create(createAccessoryDto: CreateAccessoryDto) {
     const accessory = new this.accessoryModel(createAccessoryDto);
 
     return accessory.save();
-  }
-
-  /**
-   * Sauvegarde un fichier sur le serveur.
-   *
-   * @param {Express.Multer.File} file - Le fichier a sauvegardé.
-   * @returns {Promise<{fileName: string, path: string}>} Un objet contenant le nom et le chemin du fichier.
-   * @throws {Error} Si la sauvegarde échoue.
-   */
-  async uploadFile(file: Express.Multer.File) {
-    const fileName = `${Date.now()}-${file.originalname}`;
-    const filePath = path.join(__dirname, '..', '..', 'uploads', fileName);
-
-    await fs.promises.writeFile(filePath, file.buffer);
-
-    return { fileName, path: filePath };
   }
 
   async findAll() {
@@ -68,7 +44,7 @@ export class AccessoryService {
   async findByCategory(categoryId: number) {
     const accessories = await this.accessoryModel
       .find({
-        category_id: Number(categoryId), // Conversion explicite
+        category_id: Number(categoryId),
       })
       .lean()
       .exec();
