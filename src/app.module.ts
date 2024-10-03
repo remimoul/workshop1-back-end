@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ColorModule } from './color/color.module';
 import { ProductsModule } from './products/products.module';
 import { AccessoryModule } from './accessory/accessory.module';
 import { CategoryModule } from './category/category.module';
@@ -43,7 +42,6 @@ import { VariantModule } from './variant/variant.module';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'uploads'),
     }),
-    ColorModule,
     ProductsModule,
     AccessoryModule,
     CategoryModule,
