@@ -12,3 +12,4 @@
 - Tests Category
 - Tests Variants
 - Suppression entité Colors
+- Refacto entité Accessory, la gestion des variants ne se fait plus à partir de l'accessoire

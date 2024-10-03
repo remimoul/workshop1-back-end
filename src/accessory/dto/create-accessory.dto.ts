@@ -1,63 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import {
-  IsArray,
-  IsString,
-  IsOptional,
-  ValidateNested,
-  IsBoolean,
-  IsNumber,
-  IsInt,
-} from 'class-validator';
-
-class ImageDto {
-  @IsOptional()
-  @IsString()
-  frontViewUrl?: string;
-
-  @IsOptional()
-  @IsString()
-  backViewUrl?: string;
-
-  @IsOptional()
-  @IsString()
-  sideViewUrl?: string;
-
-  @IsOptional()
-  @IsString()
-  description?: string;
-}
-
-export class VariantDto {
-  id: number;
-
-  @IsString()
-  name: string;
-
-  @IsString()
-  hexcode: string;
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => ImageDto)
-  images: ImageDto[];
-
-  @IsOptional()
-  @IsBoolean()
-  isTransparent?: boolean;
-
-  @IsOptional()
-  @IsBoolean()
-  isDefault?: boolean;
-
-  @IsOptional()
-  @IsBoolean()
-  default: boolean;
-
-  @IsOptional()
-  @IsNumber()
-  price: number;
-}
+import { IsString, IsOptional, IsBoolean, IsNumber } from 'class-validator';
 
 export class CreateAccessoryDto {
   @IsString()
@@ -75,26 +17,6 @@ export class CreateAccessoryDto {
   })
   @IsNumber()
   category_id: number;
-
-  @IsArray()
-  @IsOptional()
-  @ValidateNested({ each: true })
-  @Type(() => VariantDto)
-  @ApiProperty({
-    type: [VariantDto],
-    description: "Options de personnalisation de l'accessoire",
-    example: [
-      {
-        name: 'Black',
-        hexcode: '#000000',
-        images: [
-          { description: 'ceci est une coque arrière noire de Gameboy Color' },
-        ],
-        isTransparent: false,
-      },
-    ],
-  })
-  variants?: VariantDto[];
 
   @IsBoolean()
   @ApiProperty({

@@ -1,17 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateAccessoryDto, VariantDto } from './create-accessory.dto';
-import {
-  IsArray,
-  IsBoolean,
-  IsInt,
-  IsNumber,
-  IsOptional,
-  IsString,
-  ValidateNested,
-  isArray,
-} from 'class-validator';
-import { ColorType } from 'src/types/color';
-import { Type } from 'class-transformer';
+import { CreateAccessoryDto } from './create-accessory.dto';
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateAccessoryDto extends PartialType(CreateAccessoryDto) {
@@ -31,26 +20,6 @@ export class UpdateAccessoryDto extends PartialType(CreateAccessoryDto) {
   })
   readonly category_id: number;
 
-  @IsArray()
-  @IsOptional()
-  @ValidateNested({ each: true })
-  @Type(() => UpdateVariantDto)
-  @ApiProperty({
-    type: [VariantDto],
-    description: "Options de personnalisation de l'accessoire",
-    example: [
-      {
-        name: 'Black',
-        hexcode: '#000000',
-        images: [
-          { description: 'ceci est une coque arrière noire de Gameboy Color' },
-        ],
-        isTransparent: false,
-      },
-    ],
-  })
-  readonly variants: UpdateVariantDto[];
-
   @IsString()
   @IsOptional()
   @ApiProperty({
@@ -69,62 +38,4 @@ export class UpdateAccessoryDto extends PartialType(CreateAccessoryDto) {
     example: 'true',
   })
   readonly isBase: boolean;
-}
-
-class UpdateImageDto {
-  @IsOptional()
-  @IsString()
-  frontViewUrl?: string;
-
-  @IsOptional()
-  @IsString()
-  backViewUrl?: string;
-
-  @IsOptional()
-  @IsString()
-  sideViewUrl?: string;
-
-  @IsOptional()
-  @IsString()
-  description?: string;
-}
-
-export class UpdateVariantDto {
-  @IsOptional()
-  id: number;
-
-  @IsString()
-  @IsOptional()
-  @ApiProperty({
-    type: String,
-    description: "nom de l'accessoire",
-    example: 'Coque arrière',
-  })
-  name: string;
-
-  @IsString()
-  @IsOptional()
-  hexcode: string;
-
-  @IsArray()
-  @IsOptional()
-  @ValidateNested({ each: true })
-  @Type(() => UpdateImageDto)
-  images: UpdateImageDto[];
-
-  @IsOptional()
-  @IsBoolean()
-  isTransparent?: boolean;
-
-  @IsOptional()
-  @IsBoolean()
-  default: boolean;
-
-  @IsOptional()
-  @IsNumber()
-  price: number;
-
-  @IsOptional()
-  @IsBoolean()
-  isDefault?: boolean;
 }
