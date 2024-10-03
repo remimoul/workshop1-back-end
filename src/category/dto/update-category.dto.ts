@@ -12,7 +12,7 @@ export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {
       "id en chiffre de la catégorie, pour adapter à l'API woocommerce",
     example: '1',
   })
-  readonly id: number;
+  readonly id?: number;
 
   @IsString()
   @IsOptional()
@@ -21,7 +21,7 @@ export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {
     description: 'nom de la catégorie, ici ce sont des noms de console',
     example: 'PS Vita',
   })
-  readonly name: string;
+  readonly name?: string;
 
   @IsNumber()
   @IsOptional()
@@ -30,7 +30,7 @@ export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {
     description: 'prix de base de la console',
     example: '100',
   })
-  readonly price: number;
+  readonly price?: number;
 
   @IsNumber()
   @IsOptional()
@@ -40,5 +40,5 @@ export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {
       'réduction de prix (euros) si le client amène sa console, appliqué grâce à un props venant du front',
     example: '40',
   })
-  readonly deviceDiscount: number;
+  readonly deviceDiscount?: number;
 }
