@@ -54,7 +54,7 @@ describe('VariantController', () => {
   });
 
   describe('create', () => {
-    it('should create a new category', async () => {
+    it('should create a new variant', async () => {
       const createVariantDto: CreateVariantDto = {
         id: 35235252523,
         accessory_id: '66eca047e00bf332b875780d',
@@ -76,21 +76,21 @@ describe('VariantController', () => {
   });
 
   describe('findAll', () => {
-    it('should return an array of categories', async () => {
+    it('should return an array of variants', async () => {
       expect(await controller.findAll()).toEqual([mockVariant]);
       expect(service.findAll).toHaveBeenCalled();
     });
   });
 
   describe('findOne', () => {
-    it('should return a category by id', async () => {
+    it('should return a variant by id', async () => {
       expect(await controller.findOne('1')).toBe(mockVariant);
       expect(service.findOne).toHaveBeenCalledWith(1);
     });
   });
 
   describe('update', () => {
-    it('should update a category', async () => {
+    it('should update a variant', async () => {
       const UpdateVariantDto: UpdateVariantDto = { name: 'Updated PS Vita' };
 
       expect(await controller.update(mockVariant._id, UpdateVariantDto)).toBe(
@@ -101,7 +101,7 @@ describe('VariantController', () => {
   });
 
   describe('remove', () => {
-    it('should remove a category', async () => {
+    it('should remove a variant', async () => {
       expect(await controller.remove(mockVariant._id)).toBe(mockVariant);
       expect(service.remove).toHaveBeenCalledWith(1);
     });

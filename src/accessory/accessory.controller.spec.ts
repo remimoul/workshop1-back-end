@@ -43,7 +43,7 @@ describe('AccessoryController', () => {
   });
 
   describe('create', () => {
-    it('should create a new category', async () => {
+    it('should create a new accessory', async () => {
       const createAccessoryDto: CreateAccessoryDto = {
         name: 'Joystick',
         category_id: 1,
@@ -57,21 +57,21 @@ describe('AccessoryController', () => {
   });
 
   describe('findAll', () => {
-    it('should return an array of categories', async () => {
+    it('should return an array of accessories', async () => {
       expect(await controller.findAll()).toEqual([accessoryMock]);
       expect(service.findAll).toHaveBeenCalled();
     });
   });
 
   describe('findOne', () => {
-    it('should return a category by id', async () => {
+    it('should return an accessory by id', async () => {
       expect(await controller.findOne('1')).toBe(accessoryMock);
       expect(service.findOne).toHaveBeenCalledWith(1);
     });
   });
 
   describe('update', () => {
-    it('should update a category', async () => {
+    it('should update an accessory', async () => {
       const UpdateAccessoryDto: UpdateAccessoryDto = {
         name: 'Updated PS Vita',
       };
@@ -84,7 +84,7 @@ describe('AccessoryController', () => {
   });
 
   describe('remove', () => {
-    it('should remove a category', async () => {
+    it('should remove an accessory', async () => {
       expect(await controller.remove(accessoryMock._id)).toBe(accessoryMock);
       expect(service.remove).toHaveBeenCalledWith(1);
     });

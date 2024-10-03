@@ -154,7 +154,7 @@ describe('VariantService', () => {
       expect(result.name).toEqual('Blue');
     });
 
-    it('should throw NotFoundException if category is not found', async () => {
+    it('should throw NotFoundException if variant is not found', async () => {
       jest.spyOn(mockVariantModel, 'find').mockResolvedValueOnce(null);
 
       await expect(

@@ -102,7 +102,7 @@ describe('AccessoryService', () => {
   });
 
   describe('update', () => {
-    it('should update a variant', async () => {
+    it('should update an accessory', async () => {
       const updateAccessoryDto: UpdateAccessoryDto = { name: 'Blue' };
 
       jest
@@ -120,7 +120,7 @@ describe('AccessoryService', () => {
       expect(result.name).toEqual('Blue');
     });
 
-    it('should throw NotFoundException if category is not found', async () => {
+    it('should throw NotFoundException if accessory is not found', async () => {
       jest.spyOn(mockAccessoryModel, 'find').mockResolvedValueOnce(null);
 
       await expect(
@@ -130,7 +130,7 @@ describe('AccessoryService', () => {
   });
 
   describe('remove', () => {
-    it('should remove a variant', async () => {
+    it('should remove a accessory', async () => {
       jest
         .spyOn(mockAccessoryModel, 'find')
         .mockResolvedValueOnce([accessoryMock]);
@@ -143,7 +143,7 @@ describe('AccessoryService', () => {
       expect(result).toEqual(accessoryMock);
     });
 
-    it('should throw NotFoundException if variant is not found', async () => {
+    it('should throw NotFoundException if accessory is not found', async () => {
       jest.spyOn(mockAccessoryModel, 'find').mockResolvedValueOnce(null);
 
       await expect(service.remove(accessoryMock._id)).rejects.toThrow(
