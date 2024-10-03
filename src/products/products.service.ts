@@ -9,6 +9,7 @@ import { CategoryService } from './../category/category.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './schemas/product.schema';
+import { VariantService } from 'src/variant/variant.service';
 
 @Injectable()
 export class ProductsService {
@@ -18,6 +19,7 @@ export class ProductsService {
     @InjectModel(Product.name) private ProductModel: Model<Product>,
     private accessoryService: AccessoryService,
     private categoryService: CategoryService,
+    private variantService: VariantService,
   ) {
     this.wooCommerce = new WooCommerceRestApi({
       url: process.env.WOOCOMMERCE_URL,
@@ -107,9 +109,7 @@ export class ProductsService {
         description = accessory.description;
       }
 
-      const variant = await this.accessoryService.getVariantById(
-        option.variantId,
-      );
+      const variant = await this.variantService.findOne(option.variantId);
 
       const attribute: Attribute = {
         name: accessory.name,

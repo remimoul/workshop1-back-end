@@ -11,5 +11,6 @@ import { Variant, VariantSchema } from './schema/variant.schema';
   ],
   controllers: [VariantController],
   providers: [VariantService],
+  exports: [VariantService],
 })
 export class VariantModule {}

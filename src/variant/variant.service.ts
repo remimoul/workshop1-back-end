@@ -8,7 +8,7 @@ import { UpdateVariantDto } from './dto/update-variant.dto';
 
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Variant } from './schema/variant.schema';
+import { Variant, VariantDocument } from './schema/variant.schema';
 
 @Injectable()
 export class VariantService {
@@ -29,8 +29,8 @@ export class VariantService {
     return variants;
   }
 
-  async findOne(id: number) {
-    const variant = await this.variantModel.find({ id });
+  async findOne(id: number): Promise<VariantDocument> {
+    const variant = await this.variantModel.findOne({ id });
     if (!variant)
       throw new NotFoundException(`No variants found with the id ${id}`);
     return variant;
