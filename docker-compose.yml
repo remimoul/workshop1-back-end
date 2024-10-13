@@ -26,6 +26,8 @@ services:
     image: mongo:latest
     ports:
       - '27017:27017'
+    volumes:
+      - ${PWD}/mongodb:/data/db
     networks:
       - workshop1-backend
     restart: always
