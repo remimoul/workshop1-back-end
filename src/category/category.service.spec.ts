@@ -2,16 +2,17 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CategoryService } from './category.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Category } from './schema/category.schema';
+import { Category, CategoryDocument } from './schema/category.schema';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { slugify } from '../utils/constants';
 
 describe('CategoryService', () => {
   let service: CategoryService;
-  let model: Model<Category>;
+  let model: Model<CategoryDocument>;
 
-  const mockCategory = {
+  const mockCategory: Category = {
     id: 1,
     name: 'PS Vita',
     slug: 'ps-vita',
@@ -24,9 +25,12 @@ describe('CategoryService', () => {
     find: jest.fn(),
     findOneAndUpdate: jest.fn(),
     findOneAndDelete: jest.fn(),
-    new: jest.fn().mockResolvedValue(mockCategory),
-    constructor: jest.fn().mockResolvedValue(mockCategory),
-    save: jest.fn(),
+    create: jest.fn().mockImplementation((dto) => {
+      return {
+        ...mockCategory,
+        ...dto,
+      };
+    }),
     exec: jest.fn(),
   };
 
@@ -34,15 +38,12 @@ describe('CategoryService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         CategoryService,
-        {
-          provide: getModelToken(Category.name),
-          useValue: mockCategoryModel,
-        },
+        { provide: getModelToken(Category.name), useValue: mockCategoryModel },
       ],
     }).compile();
 
     service = module.get<CategoryService>(CategoryService);
-    model = module.get<Model<Category>>(getModelToken(Category.name));
+    model = module.get<Model<CategoryDocument>>(getModelToken(Category.name));
   });
 
   it('should be defined', () => {
@@ -52,22 +53,19 @@ describe('CategoryService', () => {
   describe('create', () => {
     it('should create a new category', async () => {
       const createCategoryDto: CreateCategoryDto = {
-        id: 1,
+        id: 34,
         name: 'PS Vita',
         price: 100,
         deviceDiscount: 40,
       };
       jest.spyOn(mockCategoryModel, 'findOne').mockResolvedValueOnce(null);
-      jest.spyOn(mockCategoryModel, 'save').mockResolvedValueOnce(mockCategory);
-
       const result = await service.create(createCategoryDto);
-
-      expect(result).toEqual(mockCategory);
+      expect(result).toEqual({ ...mockCategory, ...createCategoryDto });
     });
 
     it('should throw ConflictException if category already exists', async () => {
       const createCategoryDto: CreateCategoryDto = {
-        id: 1,
+        id: 34,
         name: 'PS Vita',
         price: 100,
         deviceDiscount: 40,
@@ -75,7 +73,6 @@ describe('CategoryService', () => {
       jest
         .spyOn(mockCategoryModel, 'findOne')
         .mockResolvedValueOnce(mockCategory);
-
       await expect(service.create(createCategoryDto)).rejects.toThrow(
         ConflictException,
       );
@@ -87,15 +84,12 @@ describe('CategoryService', () => {
       jest
         .spyOn(mockCategoryModel, 'find')
         .mockResolvedValueOnce([mockCategory]);
-
       const result = await service.findAll();
-
       expect(result).toEqual([mockCategory]);
     });
 
     it('should throw NotFoundException if no categories are found', async () => {
       jest.spyOn(mockCategoryModel, 'find').mockResolvedValueOnce(null);
-
       await expect(service.findAll()).rejects.toThrow(NotFoundException);
     });
   });
@@ -105,16 +99,15 @@ describe('CategoryService', () => {
       jest
         .spyOn(mockCategoryModel, 'findOne')
         .mockResolvedValueOnce(mockCategory);
-
-      const result = await service.findOne(1);
-
+      const result = await service.findOne(mockCategory.id);
       expect(result).toEqual(mockCategory);
     });
 
     it('should throw NotFoundException if category is not found', async () => {
       jest.spyOn(mockCategoryModel, 'findOne').mockResolvedValueOnce(null);
-
-      await expect(service.findOne(1)).rejects.toThrow(NotFoundException);
+      await expect(service.findOne(mockCategory.id)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
@@ -123,15 +116,12 @@ describe('CategoryService', () => {
       jest
         .spyOn(mockCategoryModel, 'findOne')
         .mockResolvedValueOnce(mockCategory);
-
-      const result = await service.findOneBySlug('ps-vita');
-
+      const result = await service.findOneBySlug(mockCategory.slug);
       expect(result).toEqual(mockCategory);
     });
 
     it('should throw NotFoundException if category is not found', async () => {
       jest.spyOn(mockCategoryModel, 'findOne').mockResolvedValueOnce(null);
-
       await expect(service.findOneBySlug('non-existent')).rejects.toThrow(
         NotFoundException,
       );
@@ -141,26 +131,22 @@ describe('CategoryService', () => {
   describe('update', () => {
     it('should update a category', async () => {
       const updateCategoryDto: UpdateCategoryDto = { name: 'Updated PS Vita' };
-      jest
-        .spyOn(mockCategoryModel, 'find')
-        .mockResolvedValueOnce([mockCategory]);
       jest.spyOn(mockCategoryModel, 'findOneAndUpdate').mockResolvedValueOnce({
         ...mockCategory,
         name: 'Updated PS Vita',
         slug: 'updated-ps-vita',
-      });
-
-      const result = await service.update(1, updateCategoryDto);
-
+      } as CategoryDocument);
+      const result = await service.update(mockCategory.id, updateCategoryDto);
       expect(result.name).toEqual('Updated PS Vita');
       expect(result.slug).toEqual('updated-ps-vita');
     });
 
     it('should throw NotFoundException if category is not found', async () => {
-      jest.spyOn(mockCategoryModel, 'find').mockResolvedValueOnce(null);
-
+      jest
+        .spyOn(mockCategoryModel, 'findOneAndUpdate')
+        .mockResolvedValueOnce(null);
       await expect(
-        service.update(1, { name: 'Updated PS Vita' }),
+        service.update(mockCategory.id, { name: 'Updated PS Vita' }),
       ).rejects.toThrow(NotFoundException);
     });
   });
@@ -168,21 +154,19 @@ describe('CategoryService', () => {
   describe('remove', () => {
     it('should remove a category', async () => {
       jest
-        .spyOn(mockCategoryModel, 'find')
-        .mockResolvedValueOnce([mockCategory]);
-      jest
         .spyOn(mockCategoryModel, 'findOneAndDelete')
         .mockResolvedValueOnce(mockCategory);
-
-      const result = await service.remove(1);
-
+      const result = await service.remove(mockCategory.id);
       expect(result).toEqual(mockCategory);
     });
 
     it('should throw NotFoundException if category is not found', async () => {
-      jest.spyOn(mockCategoryModel, 'find').mockResolvedValueOnce(null);
-
-      await expect(service.remove(1)).rejects.toThrow(NotFoundException);
+      jest
+        .spyOn(mockCategoryModel, 'findOneAndDelete')
+        .mockResolvedValueOnce(null);
+      await expect(service.remove(mockCategory.id)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 });

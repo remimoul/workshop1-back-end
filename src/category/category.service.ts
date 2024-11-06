@@ -8,7 +8,7 @@ import { Model } from 'mongoose';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './schema/category.schema';
-
+import { slugify } from '../utils/constants';
 @Injectable()
 export class CategoryService {
   constructor(
@@ -90,15 +90,3 @@ export class CategoryService {
     return deletedCategory;
   }
 }
-
-export const slugify = (...args: (string | number)[]): string => {
-  const value = args.join(' ');
-
-  return value
-    .normalize('NFD') // split an accented letter in the base letter and the acent
-    .replace(/[\u0300-\u036f]/g, '') // remove all previously split accents
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9 ]/g, '') // remove all chars not letters, numbers and spaces (to be replaced)
-    .replace(/\s+/g, '-'); // separator
-};
