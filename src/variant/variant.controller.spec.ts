@@ -96,14 +96,17 @@ describe('VariantController', () => {
       expect(await controller.update(mockVariant._id, UpdateVariantDto)).toBe(
         mockVariant,
       );
-      expect(service.update).toHaveBeenCalledWith(1, UpdateVariantDto);
+      expect(service.update).toHaveBeenCalledWith(
+        +mockVariant._id, // Correction ici
+        UpdateVariantDto,
+      );
     });
   });
 
   describe('remove', () => {
     it('should remove a variant', async () => {
       expect(await controller.remove(mockVariant._id)).toBe(mockVariant);
-      expect(service.remove).toHaveBeenCalledWith(1);
+      expect(service.remove).toHaveBeenCalledWith(+mockVariant._id); // Correction ici
     });
   });
 });

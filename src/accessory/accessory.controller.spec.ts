@@ -66,7 +66,7 @@ describe('AccessoryController', () => {
   describe('findOne', () => {
     it('should return an accessory by id', async () => {
       expect(await controller.findOne('1')).toBe(accessoryMock);
-      expect(service.findOne).toHaveBeenCalledWith(1);
+      expect(service.findOne).toHaveBeenCalledWith('1'); // Correction ici
     });
   });
 
@@ -79,14 +79,17 @@ describe('AccessoryController', () => {
       expect(
         await controller.update(accessoryMock._id, UpdateAccessoryDto),
       ).toBe(accessoryMock);
-      expect(service.update).toHaveBeenCalledWith(1, UpdateAccessoryDto);
+      expect(service.update).toHaveBeenCalledWith(
+        accessoryMock._id,
+        UpdateAccessoryDto,
+      ); // Correction ici
     });
   });
 
   describe('remove', () => {
     it('should remove an accessory', async () => {
       expect(await controller.remove(accessoryMock._id)).toBe(accessoryMock);
-      expect(service.remove).toHaveBeenCalledWith(1);
+      expect(service.remove).toHaveBeenCalledWith(accessoryMock._id); // Correction ici
     });
   });
 });
