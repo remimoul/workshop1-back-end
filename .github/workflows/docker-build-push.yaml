@@ -30,3 +30,25 @@ jobs:
                   platforms: linux/amd64,linux/arm64
                   push: true
                   tags: ghcr.io/jboureux/mds-m1-workshop1-back:${{ steps.date.outputs.date }}, ghcr.io/jboureux/mds-m1-workshop1-back:latest
+    test_coverage:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: '14'
+            - name: Install dependencies
+              run: npm install
+            - name: Run tests with coverage
+              run: npm run test -- --coverage
+            - name: Upload coverage to Code Climate
+              env:
+                  CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+              run: |
+                  curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+                  chmod +x ./cc-test-reporter
+                  ./cc-test-reporter before-build
+                  ./cc-test-reporter format-coverage -t lcov -o coverage/codeclimate.json
+                  ./cc-test-reporter upload-coverage
