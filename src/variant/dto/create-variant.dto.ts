@@ -2,11 +2,11 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsArray,
-  IsString,
-  IsOptional,
-  ValidateNested,
   IsBoolean,
   IsNumber,
+  IsOptional,
+  IsString,
+  ValidateNested,
 } from 'class-validator';
 import { Image } from 'src/types/image';
 
@@ -43,6 +43,7 @@ export class CreateVariantDto {
     example: '#OOO',
   })
   @IsString()
+  @IsOptional()
   readonly hexcode: string;
 
   @ApiProperty({
@@ -57,6 +58,7 @@ export class CreateVariantDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => Object)
+  @IsOptional()
   readonly images: Image[];
 
   @ApiProperty({
