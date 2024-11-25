@@ -23,13 +23,13 @@ jobs:
     - name: install dependencies
       run: npm install
 
-    - name: run tests and instrument coverage
+    - name: run coverage
       run: npm run test:cov
 
-    - name: publish code coverage to code-climate (duh)
+    - name: publish code coverage to code-climate
       uses: paambaati/codeclimate-action@v8.0.0
       env:
-        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        CC_TEST_REPORTER_ID: 5124bdc7e4e0a86412a597d1b6d372515c605e74e0e718e9faaa142dfcec1738
       with:
         debug: true
         coverageLocations: |
