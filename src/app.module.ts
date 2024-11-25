@@ -3,15 +3,16 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ColorModule } from './color/color.module';
 import { ProductsModule } from './products/products.module';
 import { AccessoryModule } from './accessory/accessory.module';
 import { CategoryModule } from './category/category.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { AuthModule } from './auth/auth.module';
 import { extname, join } from 'path';
 import { ImageModule } from './image/image.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { VariantModule } from './variant/variant.module';
 
 @Module({
   imports: [
@@ -41,11 +42,12 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'uploads'),
     }),
-    ColorModule,
     ProductsModule,
     AccessoryModule,
     CategoryModule,
+    AuthModule,
     ImageModule,
+    VariantModule,
   ],
   controllers: [AppController],
   providers: [AppService],

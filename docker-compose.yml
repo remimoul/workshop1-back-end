@@ -1,14 +1,9 @@
-version: '3.8'
-
-networks:
-  workshop1-backend: {}
-
 services:
   api:
     build:
       context: .
-    ports:
-      - '4000:4000'
+      dockerfile: ./Dockerfile
+    container_name: api
     environment:
       - LOCAL_DB_URI=${LOCAL_DB_URI}
       - PORT=${PORT}
@@ -19,14 +14,24 @@ services:
       - WOOCOMMERCE_SECRET_KEY=${WOOCOMMERCE_SECRET_KEY}
     depends_on:
       - mongo
+    ports:
+      - '3000:3000'
+    volumes:
+      - ${PWD}/src:/usr/src/app/src
     networks:
       - workshop1-backend
+    restart: always
 
   mongo:
     image: mongo:latest
-    environment:
-      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
     ports:
       - '27017:27017'
+    volumes:
+      - ${PWD}/mongodb:/data/db
     networks:
       - workshop1-backend
+    restart: always
+
+networks:
+  workshop1-backend:
+    driver: bridge

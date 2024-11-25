@@ -14,7 +14,7 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
     description: 'nom du produit, récupéré du category.name',
     example: 'PS Vita',
   })
-  readonly name: string;
+  readonly name?: string;
 
   @IsString()
   @IsOptional()
@@ -23,7 +23,7 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
     description: 'required field pour l api woocommerce',
     example: 'simple',
   })
-  readonly type: string;
+  readonly type?: string;
 
   @IsString()
   @IsOptional()
@@ -32,7 +32,7 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
     description: 'description récupéré de accessory.description',
     example: 'ceci est une coque avant de gameboy colors',
   })
-  readonly description: string;
+  readonly description?: string;
 
   @IsString()
   @IsOptional()
@@ -41,7 +41,7 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
     description: 'description récupéré de accessory.description',
     example: 'ceci est une coque avant de gameboy colors',
   })
-  readonly short_description: string;
+  readonly short_description?: string;
 
   @IsArray()
   @IsOptional()
@@ -50,7 +50,7 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
     description: 'tableau de category.id',
     example: '[1, 24]',
   })
-  readonly categories: Category[];
+  readonly categories?: Category[];
 
   @IsArray()
   @IsOptional()
@@ -59,7 +59,7 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
     description: 'tableau d image,',
     example: '[{src: "http:image_url.fr"}]',
   })
-  readonly image: Image[];
+  readonly image?: Image[];
 
   @IsArray()
   @IsOptional()
@@ -69,7 +69,7 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
     example:
       '[{"name": "attribute.name", "options": [{variant.name, variant.hexcode}]}]',
   })
-  readonly attributes: Attribute[];
+  readonly attributes?: Attribute[];
 
   @IsArray()
   @IsOptional()
@@ -79,5 +79,5 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
     example:
       '[{"name": "attribute.name", "options": [{variant.name, variant.hexcode}]}]',
   })
-  readonly default_attributes: Attribute[];
+  readonly default_attributes?: Attribute[];
 }

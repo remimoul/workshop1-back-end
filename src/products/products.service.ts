@@ -4,20 +4,21 @@ import WooCommerceRestApi from '@woocommerce/woocommerce-rest-api';
 import { Model } from 'mongoose';
 import { AddToCartPayload } from 'src/types/addToCartPayload';
 import { Attribute } from 'src/types/attribute';
-import { AccessoryService } from './../accessory/accessory.service';
-import { CategoryService } from './../category/category.service';
+import { AccessoryService } from '../accessory/accessory.service';
+import { CategoryService } from '../category/category.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './schemas/product.schema';
+import { VariantService } from '../variant/variant.service';
 
 @Injectable()
 export class ProductsService {
   private wooCommerce: WooCommerceRestApi;
-
   constructor(
     @InjectModel(Product.name) private ProductModel: Model<Product>,
     private accessoryService: AccessoryService,
     private categoryService: CategoryService,
+    private variantService: VariantService,
   ) {
     this.wooCommerce = new WooCommerceRestApi({
       url: process.env.WOOCOMMERCE_URL,
@@ -99,37 +100,26 @@ export class ProductsService {
     const category = await this.categoryService.findOne(payload.category_id);
     const attributes: Attribute[] = [];
     let basePrice = category.price;
-
     const optionPromises = payload.options.map(async (option) => {
       const accessory = await this.accessoryService.findOne(option.accessoryId);
-
       if (accessory.description) {
         description = accessory.description;
       }
-
-      const variant = await this.accessoryService.getVariantById(
-        option.variantId,
-      );
-
+      const variant = await this.variantService.findOne(option.variantId);
       const attribute: Attribute = {
         name: accessory.name,
         visible: true,
         variation: true,
         options: [`${variant.name} - ${variant.hexcode}`],
       };
-
       basePrice += variant.price ?? 0;
       attributes.push(attribute);
     });
-
     await Promise.all(optionPromises);
-
     const type = 'simple';
     const images = [{ src: process.env.IMAGE_URL }];
-
     console.log('category name: ', category.name);
     console.log('attributes: ', attributes);
-
     const finalPrice =
       basePrice - (payload.applyDiscount ? category.deviceDiscount : 0);
     const createProductDto: CreateProductDto = {
@@ -143,9 +133,7 @@ export class ProductsService {
       attributes: attributes,
       default_attributes: attributes,
     };
-
     console.log('createProductDto: ', createProductDto);
-
     return this.getWoocommerceUrl(createProductDto);
   }
 }
