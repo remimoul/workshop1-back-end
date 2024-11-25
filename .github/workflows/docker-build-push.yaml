@@ -10,7 +10,6 @@ jobs:
  coverage:
     name: "Test Coverage"
     runs-on: "ubuntu-latest"
-    needs: [tests]
     if: ${{ github.event_name == 'push' }} # Publish coverage only for push commits, not PRs.
     steps:
     - name: checkout code
